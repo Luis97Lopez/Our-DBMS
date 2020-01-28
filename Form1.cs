@@ -15,6 +15,7 @@ namespace proyecto_BDA
         public Form1()
         {
             InitializeComponent();
+			// algo
         }
     }
 }
