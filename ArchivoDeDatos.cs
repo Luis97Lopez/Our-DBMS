@@ -25,6 +25,11 @@ namespace proyecto_BDA
 
         // Estructuras de campos lógicamente relacionadas.
         public List<IComparable[]> Registros { get; } 
+
+        /**
+         * Genera un nuevo archivo de datos. Se le asigna
+         * su tabla y nombre correspondiente.
+         **/
         public ArchivoDeDatos(string nombreArchivo, Tabla tabla)
         {
             Tabla = tabla;

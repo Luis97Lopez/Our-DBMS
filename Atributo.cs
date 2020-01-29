@@ -9,6 +9,7 @@ namespace proyecto_BDA
     [Serializable]
     class Atributo
     {
+        // Nombre del atributo.
         public string Nombre { get; set; }
         public char Tipo { get; set; }
         public int TipoIndice { get; set; }

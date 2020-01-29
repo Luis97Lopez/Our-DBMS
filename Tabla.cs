@@ -12,6 +12,7 @@ namespace proyecto_BDA
     [Serializable]
     class Tabla
     {
+        // Nombre de la tabla.
         public string Nombre { get; set; }
         public bool Editable { get; set; }
         public List<Atributo>Atributos { get; }

@@ -33,7 +33,10 @@ namespace proyecto_BDA
         public SortedSet<string> Tablas { get; }
     
         /**
-         * Crea una nueva base de datos. 
+         * Crea una nueva base de datos y se le asigna su
+         * nombre correspondiente. Si no existe, crea una
+         * nueva, de lo contrario, lee la base de datos
+         * existente.
          **/
         public BaseDeDatos(string nombre)
         {
