@@ -13,6 +13,7 @@ namespace proyecto_BDA
 {
     public partial class Form1 : Form
     {
+        private BaseDeDatos BaseDeDatos { get; set; }
         public Form1()
         {
             InitializeComponent();

@@ -16,21 +16,37 @@ namespace proyecto_BDA
          * un repositorio (carpeta). 
          *   ________________________
          *  /                        \
+         * |                          |
          * |\________________________/|
+         * |                          |
          * |\________________________/|
+         * |                          |
          * |\________________________/|
-         * |\________________________/|
-         * |\________________________/|
-         * |\________________________/|
+         * |                          |
          * \__________________________/
          *
          **/
 
+        private string nombreBaseDeDatos;
         // Nombre de la carpeta con los archivos de datos.
-        public string NombreBaseDeDatos { get; set; }
+        public string NombreBaseDeDatos
+        {
+            // Obtiene el nombre de la base de datos.
+            get => nombreBaseDeDatos;
+            
+            // Modifica el nombre de la base de datos.
+            // Si éste cambia, se debe de renombrar el
+            // directorio.
+            set
+            {
+                Directory.Move(nombreBaseDeDatos, value);
+                nombreBaseDeDatos = value;
+            }
+        }
 
-        // Conjunto de tablas de la base de datos.
-        public SortedSet<string> Tablas { get; }
+        // Claves de las tablas y el nombre de su archivo
+        // correspondiente.
+        public SortedDictionary<string, string> Tablas { get; }
     
         /**
          * Crea una nueva base de datos y se le asigna su
@@ -40,8 +56,8 @@ namespace proyecto_BDA
          **/
         public BaseDeDatos(string nombre)
         {
-            NombreBaseDeDatos = nombre;
-            Tablas = new SortedSet<string>();
+            nombreBaseDeDatos = nombre;
+            Tablas = new SortedDictionary<string, string>();
 
             if (Directory.Exists(NombreBaseDeDatos))
                 // Ya existe una base de datos con ese nombre.
@@ -64,7 +80,7 @@ namespace proyecto_BDA
             { 
                 // Obtiene el nombre de la tabla.
                 string nomTabla = Path.GetFileName(archivoDeDatos).Replace(".dat", "");
-                Tablas.Add(nomTabla);
+                Tablas[nomTabla] = archivoDeDatos;
             }
         }
 
@@ -76,13 +92,13 @@ namespace proyecto_BDA
         {
             // Verifica si la tabla no existe, de no ser así,
             // no se genera un archivo de datos nuevo.
-            bool res = Tablas.Add(nomTabla);
+            bool res = !Tablas.ContainsKey(nomTabla);
 
             if (res)
             {
                 // Crea el archivo de datos de la tabla nueva.
-                string nombre = NombreBaseDeDatos + "/" + nomTabla + ".dat";
-                GuardaArchivoDeDatos(new ArchivoDeDatos(nombre, new Tabla(nomTabla)));
+                Tablas[nomTabla] = NombreBaseDeDatos + "/" + nomTabla + ".dat";
+                GuardaArchivoDeDatos(new ArchivoDeDatos(Tablas[nomTabla], new Tabla(nomTabla)));
             }
 
             return res;
@@ -95,8 +111,7 @@ namespace proyecto_BDA
          **/
         public bool AgregaAtributo(string nomTabla, Atributo atributo)
         {
-            string nombreArchivoDeDatos = NombreBaseDeDatos + "/" + nomTabla + ".dat";
-            var archivoDeDatos = LeeArchivoDeDatos(nombreArchivoDeDatos);
+            var archivoDeDatos = LeeArchivoDeDatos(Tablas[nomTabla]);
             var tabla = archivoDeDatos.Tabla;
 
             // Verifica que no se haya insertado ningún registro a
@@ -113,6 +128,14 @@ namespace proyecto_BDA
             }
 
             return res;
+        }
+
+        public void AgregaRegistro(string nomTabla, IComparable[] registro)
+        {
+            var archivoDeDatos = LeeArchivoDeDatos(Tablas[nomTabla]);
+            
+            archivoDeDatos.AgregaRegistro(registro);
+            GuardaArchivoDeDatos(archivoDeDatos);
         }
 
         /**

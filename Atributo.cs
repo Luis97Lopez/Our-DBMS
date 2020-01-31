@@ -11,14 +11,17 @@ namespace proyecto_BDA
     {
         // Nombre del atributo.
         public string Nombre { get; set; }
+        // Tipo de atributo.
+        // Entero, decimal, cadena.
         public char Tipo { get; set; }
-        public int TipoIndice { get; set; }
+        // Tamaño del atributo.
+        public int Tamaño { get; set; }
 
-        public Atributo(string nombre, char tipo, int tipoIndice)
+        public Atributo(string nombre, char tipo, int tamaño)
         {
             Nombre = nombre;
             Tipo = tipo;
-            TipoIndice = tipoIndice;
+            Tamaño = tamaño;
         }
         public override string ToString() => Nombre;
     }
