@@ -42,7 +42,7 @@
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.salirToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editarToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.agregarTabla = new System.Windows.Forms.ToolStripMenuItem();
+            this.cambiar_name_BD = new System.Windows.Forms.ToolStripMenuItem();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.vista_datos = new System.Windows.Forms.TabPage();
             this.label15 = new System.Windows.Forms.Label();
@@ -206,17 +206,17 @@
             // editarToolStripMenuItem1
             // 
             this.editarToolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.agregarTabla});
+            this.cambiar_name_BD});
             this.editarToolStripMenuItem1.Name = "editarToolStripMenuItem1";
             this.editarToolStripMenuItem1.Size = new System.Drawing.Size(49, 20);
             this.editarToolStripMenuItem1.Text = "&Editar";
             // 
-            // agregarTabla
+            // cambiar_name_BD
             // 
-            this.agregarTabla.Name = "agregarTabla";
-            this.agregarTabla.Size = new System.Drawing.Size(146, 22);
-            this.agregarTabla.Text = "&Agregar Tabla";
-            this.agregarTabla.Click += new System.EventHandler(this.agregarTabla_Click);
+            this.cambiar_name_BD.Name = "cambiar_name_BD";
+            this.cambiar_name_BD.Size = new System.Drawing.Size(171, 22);
+            this.cambiar_name_BD.Text = "&Actualizar nombre";
+            this.cambiar_name_BD.Click += new System.EventHandler(this.cambiar_name_BD_Click);
             // 
             // vista_datos
             // 
@@ -776,7 +776,7 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem salirToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem editarToolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem agregarTabla;
+        private System.Windows.Forms.ToolStripMenuItem cambiar_name_BD;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
         private System.Windows.Forms.TabControl vistas;
         private System.Windows.Forms.TabPage vista_dd;

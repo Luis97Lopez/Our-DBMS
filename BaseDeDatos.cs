@@ -105,6 +105,28 @@ namespace proyecto_BDA
         }
 
         /**
+         * Modifica el nombre de una tabla de la base de datos
+         **/
+        public bool ModificaNombreTabla(string nomTablaAnterior, string nomTablaNuevo)
+        {
+            // Verifica si la tabla existe
+            bool res = Tablas.ContainsKey(nomTablaAnterior);
+
+            if (res)
+            {
+                // Obtiene la ruta a modificar y la ruta nueva. Para
+                // utilizar le método Move de File.
+                string rutaAnterior = Tablas[nomTablaAnterior];
+                Tablas.Remove(nomTablaAnterior);
+                string rutaNueva = Tablas[nomTablaNuevo] = NombreBaseDeDatos + "\\" + nomTablaNuevo + ".dat";
+
+                File.Move(rutaAnterior, rutaNueva);
+            }
+
+            return res;
+        }
+
+        /**
          * Agrega un atributo nuevo a una tabla de la base de datos,
          * siempre y cuando a la tabla no se le haya agregado ningún
          * registro.
