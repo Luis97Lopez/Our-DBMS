@@ -128,6 +128,27 @@ namespace proyecto_BDA
         }
 
         /**
+         * Elimina la tabla de la base de datos
+         **/
+        public bool EliminaTabla(string nomTabla)
+        {
+            // Verifica si la tabla existe
+            bool res = Tablas.ContainsKey(nomTabla);
+
+            if (res)
+            {
+                // Obtiene la ruta a modificar y la ruta nueva. Para
+                // utilizar le método Move de File.
+                string ruta = Tablas[nomTabla];
+                File.Delete(ruta);
+                
+                Tablas.Remove(nomTabla);
+            }
+
+            return res;
+        }
+
+        /**
          * Agrega un atributo nuevo a una tabla de la base de datos,
          * siempre y cuando a la tabla no se le haya agregado ningún
          * registro.

@@ -430,6 +430,7 @@
             this.boton_eliminar_tabla.TabIndex = 16;
             this.boton_eliminar_tabla.Text = "Eliminar Tabla";
             this.boton_eliminar_tabla.UseVisualStyleBackColor = true;
+            this.boton_eliminar_tabla.Click += new System.EventHandler(this.boton_eliminar_tabla_Click);
             // 
             // textbox_actualizar_tabla
             // 

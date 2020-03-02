@@ -92,7 +92,7 @@ namespace proyecto_BDA
                 BaseDeDatos.ModificaNombreTabla(nombreAnterior, nombreNuevo);
 
                 textbox_actualizar_tabla.Text = "";
-                label_eliminar_tabla = "-";
+                label_eliminar_tabla.Text = "-";
                 Invalidate();
             }
         }
@@ -136,6 +136,18 @@ namespace proyecto_BDA
         private void salirToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void boton_eliminar_tabla_Click(object sender, EventArgs e)
+        {
+            if (list_tablas.SelectedItems.Count > 0)
+            {
+                string tabla = list_tablas.SelectedItems[0].Text;
+                BaseDeDatos.EliminaTabla(tabla);
+                textbox_actualizar_tabla.Text = "";
+                label_eliminar_tabla.Text = "-";
+                Invalidate();
+            }
         }
     }
 }
