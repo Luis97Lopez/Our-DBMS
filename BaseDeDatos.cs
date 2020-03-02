@@ -174,7 +174,32 @@ namespace proyecto_BDA
             return res;
         }
 
+        public bool ModificaAtributo(string nomTabla, int indiceAtributo, Atributo atributoNuevo)
+        {
+            var archivoDeDatos = LeeArchivoDeDatos(Tablas[nomTabla]);
+            var tabla = archivoDeDatos.Tabla;
 
+            bool res = tabla.Modificable;
+
+            if (res)
+            {
+                tabla.Atributos[indiceAtributo] = atributoNuevo;
+                GuardaArchivoDeDatos(archivoDeDatos);
+            }
+
+            return res;
+        }
+
+        public void EliminaAtributo(string nomTabla, int indiceAtributo)
+        {
+            var archivoDeDatos = LeeArchivoDeDatos(Tablas[nomTabla]);
+            var tabla = archivoDeDatos.Tabla;
+
+            tabla.Atributos.RemoveAt(indiceAtributo);
+            tabla.Modificable = false;
+
+            GuardaArchivoDeDatos(archivoDeDatos);
+        }
 
         public void AgregaRegistro(string nomTabla, IComparable[] registro)
         {

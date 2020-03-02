@@ -15,11 +15,13 @@ namespace proyecto_BDA
         // Nombre de la tabla.
         public string Nombre { get; set; }
         public bool Editable { get; set; }
+        public bool Modificable { get; set; }
         public List<Atributo>Atributos { get; }
         public Tabla(string nombre)
         {
             Nombre = nombre;
             Editable = true;
+            Modificable = true;
             Atributos = new List<Atributo>();
         }
 
