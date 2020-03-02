@@ -41,8 +41,6 @@
             this.cerrarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.salirToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.editarToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.cambiar_name_BD = new System.Windows.Forms.ToolStripMenuItem();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.vista_datos = new System.Windows.Forms.TabPage();
             this.label15 = new System.Windows.Forms.Label();
@@ -93,8 +91,11 @@
             this.dataGridViewTextBoxColumn5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.label1 = new System.Windows.Forms.Label();
-            this.textbox_nombre_bd = new System.Windows.Forms.TextBox();
             this.vistas = new System.Windows.Forms.TabControl();
+            this.textbox_modificar_bd = new System.Windows.Forms.TextBox();
+            this.modificar_bd = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
+            this.label_bd = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher1)).BeginInit();
             this.menu.SuspendLayout();
             this.vista_datos.SuspendLayout();
@@ -116,8 +117,7 @@
             // menu
             // 
             this.menu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.archivoToolStripMenuItem1,
-            this.editarToolStripMenuItem1});
+            this.archivoToolStripMenuItem1});
             this.menu.Location = new System.Drawing.Point(0, 0);
             this.menu.Name = "menu";
             this.menu.Size = new System.Drawing.Size(806, 24);
@@ -146,7 +146,7 @@
             this.nuevoToolStripMenuItem1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.nuevoToolStripMenuItem1.Name = "nuevoToolStripMenuItem1";
             this.nuevoToolStripMenuItem1.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
-            this.nuevoToolStripMenuItem1.Size = new System.Drawing.Size(156, 22);
+            this.nuevoToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
             this.nuevoToolStripMenuItem1.Text = "&Nuevo";
             this.nuevoToolStripMenuItem1.Click += new System.EventHandler(this.nuevoToolStripMenuItem1_Click);
             // 
@@ -202,21 +202,6 @@
             this.salirToolStripMenuItem.Name = "salirToolStripMenuItem";
             this.salirToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
             this.salirToolStripMenuItem.Text = "&Salir";
-            // 
-            // editarToolStripMenuItem1
-            // 
-            this.editarToolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.cambiar_name_BD});
-            this.editarToolStripMenuItem1.Name = "editarToolStripMenuItem1";
-            this.editarToolStripMenuItem1.Size = new System.Drawing.Size(49, 20);
-            this.editarToolStripMenuItem1.Text = "&Editar";
-            // 
-            // cambiar_name_BD
-            // 
-            this.cambiar_name_BD.Name = "cambiar_name_BD";
-            this.cambiar_name_BD.Size = new System.Drawing.Size(171, 22);
-            this.cambiar_name_BD.Text = "&Actualizar nombre";
-            this.cambiar_name_BD.Click += new System.EventHandler(this.cambiar_name_BD_Click);
             // 
             // vista_datos
             // 
@@ -321,9 +306,12 @@
             // vista_dd
             // 
             this.vista_dd.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.vista_dd.Controls.Add(this.label_bd);
+            this.vista_dd.Controls.Add(this.button2);
+            this.vista_dd.Controls.Add(this.modificar_bd);
+            this.vista_dd.Controls.Add(this.textbox_modificar_bd);
             this.vista_dd.Controls.Add(this.tabs);
             this.vista_dd.Controls.Add(this.label1);
-            this.vista_dd.Controls.Add(this.textbox_nombre_bd);
             this.vista_dd.Location = new System.Drawing.Point(4, 22);
             this.vista_dd.Name = "vista_dd";
             this.vista_dd.Padding = new System.Windows.Forms.Padding(3);
@@ -335,10 +323,10 @@
             // 
             this.tabs.Controls.Add(this.tab_entidades);
             this.tabs.Controls.Add(this.tab_atributos);
-            this.tabs.Location = new System.Drawing.Point(6, 24);
+            this.tabs.Location = new System.Drawing.Point(6, 27);
             this.tabs.Name = "tabs";
             this.tabs.SelectedIndex = 0;
-            this.tabs.Size = new System.Drawing.Size(774, 413);
+            this.tabs.Size = new System.Drawing.Size(774, 410);
             this.tabs.TabIndex = 11;
             // 
             // tab_entidades
@@ -356,7 +344,7 @@
             this.tab_entidades.Location = new System.Drawing.Point(4, 22);
             this.tab_entidades.Name = "tab_entidades";
             this.tab_entidades.Padding = new System.Windows.Forms.Padding(3);
-            this.tab_entidades.Size = new System.Drawing.Size(766, 387);
+            this.tab_entidades.Size = new System.Drawing.Size(766, 384);
             this.tab_entidades.TabIndex = 0;
             this.tab_entidades.Text = "Entidades";
             // 
@@ -710,15 +698,6 @@
             this.label1.TabIndex = 2;
             this.label1.Text = "Nombre de Base de Datos:";
             // 
-            // textbox_nombre_bd
-            // 
-            this.textbox_nombre_bd.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textbox_nombre_bd.Location = new System.Drawing.Point(149, 8);
-            this.textbox_nombre_bd.Name = "textbox_nombre_bd";
-            this.textbox_nombre_bd.ReadOnly = true;
-            this.textbox_nombre_bd.Size = new System.Drawing.Size(192, 13);
-            this.textbox_nombre_bd.TabIndex = 1;
-            // 
             // vistas
             // 
             this.vistas.CausesValidation = false;
@@ -729,6 +708,42 @@
             this.vistas.SelectedIndex = 0;
             this.vistas.Size = new System.Drawing.Size(794, 469);
             this.vistas.TabIndex = 13;
+            // 
+            // textbox_modificar_bd
+            // 
+            this.textbox_modificar_bd.Location = new System.Drawing.Point(330, 5);
+            this.textbox_modificar_bd.Name = "textbox_modificar_bd";
+            this.textbox_modificar_bd.Size = new System.Drawing.Size(137, 20);
+            this.textbox_modificar_bd.TabIndex = 18;
+            // 
+            // modificar_bd
+            // 
+            this.modificar_bd.Location = new System.Drawing.Point(489, 4);
+            this.modificar_bd.Name = "modificar_bd";
+            this.modificar_bd.Size = new System.Drawing.Size(137, 23);
+            this.modificar_bd.TabIndex = 19;
+            this.modificar_bd.Text = "Modificar BD";
+            this.modificar_bd.UseVisualStyleBackColor = true;
+            this.modificar_bd.Click += new System.EventHandler(this.modificar_bd_Click);
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(637, 4);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(136, 23);
+            this.button2.TabIndex = 18;
+            this.button2.Text = "Eliminar BD";
+            this.button2.UseVisualStyleBackColor = true;
+            // 
+            // label_bd
+            // 
+            this.label_bd.AutoSize = true;
+            this.label_bd.Location = new System.Drawing.Point(149, 9);
+            this.label_bd.Name = "label_bd";
+            this.label_bd.Size = new System.Drawing.Size(10, 13);
+            this.label_bd.TabIndex = 18;
+            this.label_bd.Text = "-";
+            this.label_bd.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // Form1
             // 
@@ -775,8 +790,6 @@
         private System.Windows.Forms.ToolStripMenuItem cerrarToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem salirToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem editarToolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem cambiar_name_BD;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
         private System.Windows.Forms.TabControl vistas;
         private System.Windows.Forms.TabPage vista_dd;
@@ -819,7 +832,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn5;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn6;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox textbox_nombre_bd;
         private System.Windows.Forms.TabPage vista_datos;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.DataGridView registros_datos;
@@ -829,6 +841,10 @@
         private System.Windows.Forms.ComboBox combobox_entidades2;
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.DataGridView grid_insertar_datos;
+        private System.Windows.Forms.Label label_bd;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button modificar_bd;
+        private System.Windows.Forms.TextBox textbox_modificar_bd;
     }
 }
 

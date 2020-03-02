@@ -33,7 +33,7 @@ namespace proyecto_BDA
             if(BaseDeDatos != null && BaseDeDatos.NombreBaseDeDatos != null)
             {
                 string s = BaseDeDatos.NombreBaseDeDatos;
-                textbox_nombre_bd.Text = s.Substring(s.LastIndexOf("\\") + 1);
+                label_bd.Text = s.Substring(s.LastIndexOf("\\") + 1);
 
                 list_tablas.Items.Clear();
                 foreach (var item in BaseDeDatos.Tablas)
@@ -45,7 +45,7 @@ namespace proyecto_BDA
             }
             else
             {
-                textbox_nombre_bd.Text = "";
+                label_bd.Text = "";
                 list_tablas.Items.Clear();
             }
         }
@@ -94,17 +94,27 @@ namespace proyecto_BDA
             }
         }
 
-        private void cambiar_name_BD_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void list_tablas_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (list_tablas.SelectedItems.Count > 0)
             {
                 string nombre = list_tablas.SelectedItems[0].Text;
                 label_eliminar_tabla.Text = textbox_actualizar_tabla.Text = nombre;
+            }
+        }
+
+        private void modificar_bd_Click(object sender, EventArgs e)
+        {
+            if (textbox_modificar_bd.Text != "")
+            {
+                
+                int index_path = BaseDeDatos.NombreBaseDeDatos.LastIndexOf("\\");
+                string nombreNuevo = BaseDeDatos.NombreBaseDeDatos.Substring(0, index_path+1) + textbox_modificar_bd.Text;
+
+                BaseDeDatos.NombreBaseDeDatos = nombreNuevo;
+
+                textbox_modificar_bd.Text = "";
+                Invalidate();
             }
         }
     }

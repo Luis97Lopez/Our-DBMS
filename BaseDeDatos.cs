@@ -41,6 +41,7 @@ namespace proyecto_BDA
             {
                 Directory.Move(nombreBaseDeDatos, value);
                 nombreBaseDeDatos = value;
+                this.LeeTablas();
             }
         }
 
@@ -97,7 +98,7 @@ namespace proyecto_BDA
             if (res)
             {
                 // Crea el archivo de datos de la tabla nueva.
-                Tablas[nomTabla] = NombreBaseDeDatos + "/" + nomTabla + ".dat";
+                Tablas[nomTabla] = NombreBaseDeDatos + "\\" + nomTabla + ".dat";
                 GuardaArchivoDeDatos(new ArchivoDeDatos(Tablas[nomTabla], new Tabla(nomTabla)));
             }
 
