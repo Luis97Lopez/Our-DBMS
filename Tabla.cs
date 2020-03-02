@@ -23,6 +23,15 @@ namespace proyecto_BDA
             Atributos = new List<Atributo>();
         }
 
+        public bool ContieneLlavePrimaria()
+        {
+            bool res = false;
+
+            for (int i = 0; i < Atributos.Count && !res; i++)
+                res = Atributos[i].Llave == TipoLlave.Primaria;
+
+            return res;
+        }
         public override string ToString() => Nombre;
     }
 }

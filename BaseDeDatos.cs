@@ -161,10 +161,10 @@ namespace proyecto_BDA
             // Verifica que no se haya insertado ningún registro a
             // este archivo de datos.
             bool res = tabla.Editable;
+            res &= atributo.Llave != TipoLlave.Primaria || (atributo.Llave == TipoLlave.Primaria && !tabla.ContieneLlavePrimaria());
 
             if (res)
             {
-
                 // Agrega el atributo y actualiza el archivo de
                 // datos.
                 tabla.Atributos.Add(atributo);
@@ -173,6 +173,8 @@ namespace proyecto_BDA
 
             return res;
         }
+
+
 
         public void AgregaRegistro(string nomTabla, IComparable[] registro)
         {
