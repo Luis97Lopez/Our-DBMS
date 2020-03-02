@@ -52,6 +52,10 @@
             this.label16 = new System.Windows.Forms.Label();
             this.grid_insertar_datos = new System.Windows.Forms.DataGridView();
             this.vista_dd = new System.Windows.Forms.TabPage();
+            this.label_bd = new System.Windows.Forms.Label();
+            this.boton_eliminar_bd = new System.Windows.Forms.Button();
+            this.modificar_bd = new System.Windows.Forms.Button();
+            this.textbox_modificar_bd = new System.Windows.Forms.TextBox();
             this.tabs = new System.Windows.Forms.TabControl();
             this.tab_entidades = new System.Windows.Forms.TabPage();
             this.label_eliminar_tabla = new System.Windows.Forms.Label();
@@ -92,10 +96,6 @@
             this.dataGridViewTextBoxColumn6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.label1 = new System.Windows.Forms.Label();
             this.vistas = new System.Windows.Forms.TabControl();
-            this.textbox_modificar_bd = new System.Windows.Forms.TextBox();
-            this.modificar_bd = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.label_bd = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher1)).BeginInit();
             this.menu.SuspendLayout();
             this.vista_datos.SuspendLayout();
@@ -200,8 +200,9 @@
             // salirToolStripMenuItem
             // 
             this.salirToolStripMenuItem.Name = "salirToolStripMenuItem";
-            this.salirToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+            this.salirToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.salirToolStripMenuItem.Text = "&Salir";
+            this.salirToolStripMenuItem.Click += new System.EventHandler(this.salirToolStripMenuItem_Click);
             // 
             // vista_datos
             // 
@@ -307,7 +308,7 @@
             // 
             this.vista_dd.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.vista_dd.Controls.Add(this.label_bd);
-            this.vista_dd.Controls.Add(this.button2);
+            this.vista_dd.Controls.Add(this.boton_eliminar_bd);
             this.vista_dd.Controls.Add(this.modificar_bd);
             this.vista_dd.Controls.Add(this.textbox_modificar_bd);
             this.vista_dd.Controls.Add(this.tabs);
@@ -318,6 +319,44 @@
             this.vista_dd.Size = new System.Drawing.Size(786, 443);
             this.vista_dd.TabIndex = 0;
             this.vista_dd.Text = "Diccionario de Datos";
+            // 
+            // label_bd
+            // 
+            this.label_bd.AutoSize = true;
+            this.label_bd.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_bd.Location = new System.Drawing.Point(149, 8);
+            this.label_bd.Name = "label_bd";
+            this.label_bd.Size = new System.Drawing.Size(11, 13);
+            this.label_bd.TabIndex = 18;
+            this.label_bd.Text = "-";
+            this.label_bd.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // boton_eliminar_bd
+            // 
+            this.boton_eliminar_bd.Location = new System.Drawing.Point(637, 4);
+            this.boton_eliminar_bd.Name = "boton_eliminar_bd";
+            this.boton_eliminar_bd.Size = new System.Drawing.Size(136, 23);
+            this.boton_eliminar_bd.TabIndex = 18;
+            this.boton_eliminar_bd.Text = "Eliminar BD";
+            this.boton_eliminar_bd.UseVisualStyleBackColor = true;
+            this.boton_eliminar_bd.Click += new System.EventHandler(this.boton_eliminar_bd_Click);
+            // 
+            // modificar_bd
+            // 
+            this.modificar_bd.Location = new System.Drawing.Point(489, 4);
+            this.modificar_bd.Name = "modificar_bd";
+            this.modificar_bd.Size = new System.Drawing.Size(137, 23);
+            this.modificar_bd.TabIndex = 19;
+            this.modificar_bd.Text = "Modificar BD";
+            this.modificar_bd.UseVisualStyleBackColor = true;
+            this.modificar_bd.Click += new System.EventHandler(this.modificar_bd_Click);
+            // 
+            // textbox_modificar_bd
+            // 
+            this.textbox_modificar_bd.Location = new System.Drawing.Point(330, 5);
+            this.textbox_modificar_bd.Name = "textbox_modificar_bd";
+            this.textbox_modificar_bd.Size = new System.Drawing.Size(137, 20);
+            this.textbox_modificar_bd.TabIndex = 18;
             // 
             // tabs
             // 
@@ -351,7 +390,7 @@
             // label_eliminar_tabla
             // 
             this.label_eliminar_tabla.AutoSize = true;
-            this.label_eliminar_tabla.Location = new System.Drawing.Point(477, 34);
+            this.label_eliminar_tabla.Location = new System.Drawing.Point(548, 39);
             this.label_eliminar_tabla.Name = "label_eliminar_tabla";
             this.label_eliminar_tabla.Size = new System.Drawing.Size(10, 13);
             this.label_eliminar_tabla.TabIndex = 17;
@@ -367,7 +406,7 @@
             this.list_tablas.HideSelection = false;
             this.list_tablas.Location = new System.Drawing.Point(18, 113);
             this.list_tablas.Name = "list_tablas";
-            this.list_tablas.Size = new System.Drawing.Size(697, 250);
+            this.list_tablas.Size = new System.Drawing.Size(711, 245);
             this.list_tablas.TabIndex = 7;
             this.list_tablas.UseCompatibleStateImageBehavior = false;
             this.list_tablas.View = System.Windows.Forms.View.Details;
@@ -385,25 +424,25 @@
             // 
             // boton_eliminar_tabla
             // 
-            this.boton_eliminar_tabla.Location = new System.Drawing.Point(480, 60);
+            this.boton_eliminar_tabla.Location = new System.Drawing.Point(551, 65);
             this.boton_eliminar_tabla.Name = "boton_eliminar_tabla";
-            this.boton_eliminar_tabla.Size = new System.Drawing.Size(136, 23);
+            this.boton_eliminar_tabla.Size = new System.Drawing.Size(174, 23);
             this.boton_eliminar_tabla.TabIndex = 16;
             this.boton_eliminar_tabla.Text = "Eliminar Tabla";
             this.boton_eliminar_tabla.UseVisualStyleBackColor = true;
             // 
             // textbox_actualizar_tabla
             // 
-            this.textbox_actualizar_tabla.Location = new System.Drawing.Point(252, 36);
+            this.textbox_actualizar_tabla.Location = new System.Drawing.Point(283, 36);
             this.textbox_actualizar_tabla.Name = "textbox_actualizar_tabla";
-            this.textbox_actualizar_tabla.Size = new System.Drawing.Size(137, 20);
+            this.textbox_actualizar_tabla.Size = new System.Drawing.Size(174, 20);
             this.textbox_actualizar_tabla.TabIndex = 15;
             // 
             // boton_modificar_tabla
             // 
-            this.boton_modificar_tabla.Location = new System.Drawing.Point(252, 65);
+            this.boton_modificar_tabla.Location = new System.Drawing.Point(283, 65);
             this.boton_modificar_tabla.Name = "boton_modificar_tabla";
-            this.boton_modificar_tabla.Size = new System.Drawing.Size(137, 23);
+            this.boton_modificar_tabla.Size = new System.Drawing.Size(174, 23);
             this.boton_modificar_tabla.TabIndex = 14;
             this.boton_modificar_tabla.Text = "Actualizar Tabla";
             this.boton_modificar_tabla.UseVisualStyleBackColor = true;
@@ -422,7 +461,7 @@
             // 
             this.textbox_agregar_tabla.Location = new System.Drawing.Point(65, 36);
             this.textbox_agregar_tabla.Name = "textbox_agregar_tabla";
-            this.textbox_agregar_tabla.Size = new System.Drawing.Size(100, 20);
+            this.textbox_agregar_tabla.Size = new System.Drawing.Size(127, 20);
             this.textbox_agregar_tabla.TabIndex = 7;
             // 
             // label6
@@ -439,7 +478,7 @@
             // 
             this.boton_agregar_tabla.Location = new System.Drawing.Point(18, 65);
             this.boton_agregar_tabla.Name = "boton_agregar_tabla";
-            this.boton_agregar_tabla.Size = new System.Drawing.Size(147, 23);
+            this.boton_agregar_tabla.Size = new System.Drawing.Size(174, 23);
             this.boton_agregar_tabla.TabIndex = 9;
             this.boton_agregar_tabla.Text = "Agregar Tabla";
             this.boton_agregar_tabla.UseVisualStyleBackColor = true;
@@ -467,7 +506,7 @@
             this.tab_atributos.Location = new System.Drawing.Point(4, 22);
             this.tab_atributos.Name = "tab_atributos";
             this.tab_atributos.Padding = new System.Windows.Forms.Padding(3);
-            this.tab_atributos.Size = new System.Drawing.Size(766, 387);
+            this.tab_atributos.Size = new System.Drawing.Size(766, 384);
             this.tab_atributos.TabIndex = 1;
             this.tab_atributos.Text = "Atributos";
             // 
@@ -709,42 +748,6 @@
             this.vistas.Size = new System.Drawing.Size(794, 469);
             this.vistas.TabIndex = 13;
             // 
-            // textbox_modificar_bd
-            // 
-            this.textbox_modificar_bd.Location = new System.Drawing.Point(330, 5);
-            this.textbox_modificar_bd.Name = "textbox_modificar_bd";
-            this.textbox_modificar_bd.Size = new System.Drawing.Size(137, 20);
-            this.textbox_modificar_bd.TabIndex = 18;
-            // 
-            // modificar_bd
-            // 
-            this.modificar_bd.Location = new System.Drawing.Point(489, 4);
-            this.modificar_bd.Name = "modificar_bd";
-            this.modificar_bd.Size = new System.Drawing.Size(137, 23);
-            this.modificar_bd.TabIndex = 19;
-            this.modificar_bd.Text = "Modificar BD";
-            this.modificar_bd.UseVisualStyleBackColor = true;
-            this.modificar_bd.Click += new System.EventHandler(this.modificar_bd_Click);
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(637, 4);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(136, 23);
-            this.button2.TabIndex = 18;
-            this.button2.Text = "Eliminar BD";
-            this.button2.UseVisualStyleBackColor = true;
-            // 
-            // label_bd
-            // 
-            this.label_bd.AutoSize = true;
-            this.label_bd.Location = new System.Drawing.Point(149, 9);
-            this.label_bd.Name = "label_bd";
-            this.label_bd.Size = new System.Drawing.Size(10, 13);
-            this.label_bd.TabIndex = 18;
-            this.label_bd.Text = "-";
-            this.label_bd.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -752,9 +755,10 @@
             this.ClientSize = new System.Drawing.Size(806, 529);
             this.Controls.Add(this.vistas);
             this.Controls.Add(this.menu);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.MainMenuStrip = this.menu;
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "Bases de Datos A - Manejador de Base de Datos";
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.Form1_Paint);
             ((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher1)).EndInit();
             this.menu.ResumeLayout(false);
@@ -842,7 +846,7 @@
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.DataGridView grid_insertar_datos;
         private System.Windows.Forms.Label label_bd;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button boton_eliminar_bd;
         private System.Windows.Forms.Button modificar_bd;
         private System.Windows.Forms.TextBox textbox_modificar_bd;
     }

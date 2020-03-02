@@ -26,6 +26,7 @@ namespace proyecto_BDA
             {
                 BaseDeDatos = new BaseDeDatos(open.FileName);
             }
+            Invalidate();
         }
 
         private void Form1_Paint(object sender, PaintEventArgs e)
@@ -56,6 +57,7 @@ namespace proyecto_BDA
             if (open.ShowDialog() == DialogResult.OK)
             {
                 BaseDeDatos = new BaseDeDatos(open.SelectedPath);
+                Invalidate();
             }
         }
 
@@ -90,6 +92,7 @@ namespace proyecto_BDA
                 BaseDeDatos.ModificaNombreTabla(nombreAnterior, nombreNuevo);
 
                 textbox_actualizar_tabla.Text = "";
+                label_eliminar_tabla = "-";
                 Invalidate();
             }
         }
@@ -116,6 +119,23 @@ namespace proyecto_BDA
                 textbox_modificar_bd.Text = "";
                 Invalidate();
             }
+        }
+
+        private void boton_eliminar_bd_Click(object sender, EventArgs e)
+        {
+            if (BaseDeDatos != null && 
+                MessageBox.Show("¿Estás seguro de eliminar la Base de Datos?", 
+                "Confirmar eliminación", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                Directory.Delete(BaseDeDatos.NombreBaseDeDatos, true);
+                BaseDeDatos = null;
+                Invalidate();
+            }
+        }
+
+        private void salirToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }
