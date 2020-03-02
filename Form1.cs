@@ -37,11 +37,15 @@ namespace proyecto_BDA
                 label_bd.Text = s.Substring(s.LastIndexOf("\\") + 1);
 
                 list_tablas.Items.Clear();
+                combobox_tablas_atributos.Items.Clear();
+
                 foreach (var item in BaseDeDatos.Tablas)
                 {
                     string[] subitems = new string[] {item.Key, item.Value };
                     ListViewItem list = new ListViewItem(subitems);
                     list_tablas.Items.Add(list);
+
+                    combobox_tablas_atributos.Items.Add(item.Key);
                 }
             }
             else

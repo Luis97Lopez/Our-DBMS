@@ -79,7 +79,7 @@
             this.textbox_longitud = new System.Windows.Forms.TextBox();
             this.combobox_tipo = new System.Windows.Forms.ComboBox();
             this.label9 = new System.Windows.Forms.Label();
-            this.combobox_entidades1 = new System.Windows.Forms.ComboBox();
+            this.combobox_tablas_atributos = new System.Windows.Forms.ComboBox();
             this.label8 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.textbox_agregar_atributo = new System.Windows.Forms.TextBox();
@@ -120,7 +120,7 @@
             this.archivoToolStripMenuItem1});
             this.menu.Location = new System.Drawing.Point(0, 0);
             this.menu.Name = "menu";
-            this.menu.Size = new System.Drawing.Size(806, 24);
+            this.menu.Size = new System.Drawing.Size(801, 24);
             this.menu.TabIndex = 0;
             this.menu.Text = "menuStrip1";
             // 
@@ -156,14 +156,14 @@
             this.abrirToolStripMenuItem1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.abrirToolStripMenuItem1.Name = "abrirToolStripMenuItem1";
             this.abrirToolStripMenuItem1.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.abrirToolStripMenuItem1.Size = new System.Drawing.Size(156, 22);
+            this.abrirToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
             this.abrirToolStripMenuItem1.Text = "&Abrir";
             this.abrirToolStripMenuItem1.Click += new System.EventHandler(this.abrirToolStripMenuItem1_Click);
             // 
             // toolStripSeparator
             // 
             this.toolStripSeparator.Name = "toolStripSeparator";
-            this.toolStripSeparator.Size = new System.Drawing.Size(153, 6);
+            this.toolStripSeparator.Size = new System.Drawing.Size(177, 6);
             // 
             // guardarToolStripMenuItem
             // 
@@ -171,31 +171,31 @@
             this.guardarToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.guardarToolStripMenuItem.Name = "guardarToolStripMenuItem";
             this.guardarToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-            this.guardarToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+            this.guardarToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.guardarToolStripMenuItem.Text = "&Guardar";
             // 
             // guardarcomoToolStripMenuItem
             // 
             this.guardarcomoToolStripMenuItem.Name = "guardarcomoToolStripMenuItem";
-            this.guardarcomoToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+            this.guardarcomoToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.guardarcomoToolStripMenuItem.Text = "G&uardar como";
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(153, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
             // 
             // cerrarToolStripMenuItem
             // 
             this.cerrarToolStripMenuItem.Name = "cerrarToolStripMenuItem";
-            this.cerrarToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+            this.cerrarToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.cerrarToolStripMenuItem.Text = "Cerrar";
             this.cerrarToolStripMenuItem.Click += new System.EventHandler(this.cerrarToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(153, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(177, 6);
             // 
             // salirToolStripMenuItem
             // 
@@ -245,12 +245,12 @@
             this.registros_datos.MultiSelect = false;
             this.registros_datos.Name = "registros_datos";
             this.registros_datos.ReadOnly = true;
-            this.registros_datos.Size = new System.Drawing.Size(776, 266);
+            this.registros_datos.Size = new System.Drawing.Size(739, 266);
             this.registros_datos.TabIndex = 32;
             // 
             // boton_modificar_registro
             // 
-            this.boton_modificar_registro.Location = new System.Drawing.Point(678, 75);
+            this.boton_modificar_registro.Location = new System.Drawing.Point(641, 75);
             this.boton_modificar_registro.Name = "boton_modificar_registro";
             this.boton_modificar_registro.Size = new System.Drawing.Size(123, 23);
             this.boton_modificar_registro.TabIndex = 31;
@@ -259,7 +259,7 @@
             // 
             // boton_eliminar_registro
             // 
-            this.boton_eliminar_registro.Location = new System.Drawing.Point(678, 104);
+            this.boton_eliminar_registro.Location = new System.Drawing.Point(641, 104);
             this.boton_eliminar_registro.Name = "boton_eliminar_registro";
             this.boton_eliminar_registro.Size = new System.Drawing.Size(123, 23);
             this.boton_eliminar_registro.TabIndex = 30;
@@ -268,7 +268,7 @@
             // 
             // boton_agregar_registro
             // 
-            this.boton_agregar_registro.Location = new System.Drawing.Point(678, 46);
+            this.boton_agregar_registro.Location = new System.Drawing.Point(641, 46);
             this.boton_agregar_registro.Name = "boton_agregar_registro";
             this.boton_agregar_registro.Size = new System.Drawing.Size(123, 23);
             this.boton_agregar_registro.TabIndex = 29;
@@ -290,9 +290,9 @@
             this.label16.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label16.Location = new System.Drawing.Point(22, 16);
             this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(97, 13);
+            this.label16.Size = new System.Drawing.Size(82, 13);
             this.label16.TabIndex = 19;
-            this.label16.Text = "Registro actual:";
+            this.label16.Text = "Tabla actual:";
             // 
             // grid_insertar_datos
             // 
@@ -301,7 +301,7 @@
             this.grid_insertar_datos.GridColor = System.Drawing.SystemColors.ButtonFace;
             this.grid_insertar_datos.Location = new System.Drawing.Point(25, 59);
             this.grid_insertar_datos.Name = "grid_insertar_datos";
-            this.grid_insertar_datos.Size = new System.Drawing.Size(630, 68);
+            this.grid_insertar_datos.Size = new System.Drawing.Size(586, 68);
             this.grid_insertar_datos.TabIndex = 0;
             // 
             // vista_dd
@@ -497,7 +497,7 @@
             this.tab_atributos.Controls.Add(this.textbox_longitud);
             this.tab_atributos.Controls.Add(this.combobox_tipo);
             this.tab_atributos.Controls.Add(this.label9);
-            this.tab_atributos.Controls.Add(this.combobox_entidades1);
+            this.tab_atributos.Controls.Add(this.combobox_tablas_atributos);
             this.tab_atributos.Controls.Add(this.label8);
             this.tab_atributos.Controls.Add(this.label7);
             this.tab_atributos.Controls.Add(this.textbox_agregar_atributo);
@@ -523,7 +523,7 @@
             // label_atributo_actual
             // 
             this.label_atributo_actual.AutoSize = true;
-            this.label_atributo_actual.Location = new System.Drawing.Point(650, 32);
+            this.label_atributo_actual.Location = new System.Drawing.Point(634, 30);
             this.label_atributo_actual.Name = "label_atributo_actual";
             this.label_atributo_actual.Size = new System.Drawing.Size(10, 13);
             this.label_atributo_actual.TabIndex = 27;
@@ -532,7 +532,7 @@
             // 
             // boton_eliminar_atributo
             // 
-            this.boton_eliminar_atributo.Location = new System.Drawing.Point(653, 54);
+            this.boton_eliminar_atributo.Location = new System.Drawing.Point(637, 54);
             this.boton_eliminar_atributo.Name = "boton_eliminar_atributo";
             this.boton_eliminar_atributo.Size = new System.Drawing.Size(123, 23);
             this.boton_eliminar_atributo.TabIndex = 26;
@@ -601,23 +601,23 @@
             this.label9.TabIndex = 19;
             this.label9.Text = "Tipo:";
             // 
-            // combobox_entidades1
+            // combobox_tablas_atributos
             // 
-            this.combobox_entidades1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.combobox_entidades1.FormattingEnabled = true;
-            this.combobox_entidades1.Location = new System.Drawing.Point(18, 46);
-            this.combobox_entidades1.Name = "combobox_entidades1";
-            this.combobox_entidades1.Size = new System.Drawing.Size(121, 21);
-            this.combobox_entidades1.TabIndex = 18;
+            this.combobox_tablas_atributos.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.combobox_tablas_atributos.FormattingEnabled = true;
+            this.combobox_tablas_atributos.Location = new System.Drawing.Point(18, 46);
+            this.combobox_tablas_atributos.Name = "combobox_tablas_atributos";
+            this.combobox_tablas_atributos.Size = new System.Drawing.Size(121, 21);
+            this.combobox_tablas_atributos.TabIndex = 18;
             // 
             // label8
             // 
             this.label8.AutoSize = true;
             this.label8.Location = new System.Drawing.Point(15, 30);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(78, 13);
+            this.label8.Size = new System.Drawing.Size(69, 13);
             this.label8.TabIndex = 17;
-            this.label8.Text = "Entidad actual:";
+            this.label8.Text = "Tabla actual:";
             // 
             // label7
             // 
@@ -674,7 +674,7 @@
             this.diccionario_atributos.Location = new System.Drawing.Point(8, 105);
             this.diccionario_atributos.Name = "diccionario_atributos";
             this.diccionario_atributos.RowHeadersWidth = 5;
-            this.diccionario_atributos.Size = new System.Drawing.Size(784, 270);
+            this.diccionario_atributos.Size = new System.Drawing.Size(752, 270);
             this.diccionario_atributos.TabIndex = 11;
             // 
             // dataGridViewTextBoxColumn1
@@ -753,7 +753,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(806, 529);
+            this.ClientSize = new System.Drawing.Size(801, 502);
             this.Controls.Add(this.vistas);
             this.Controls.Add(this.menu);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
@@ -821,7 +821,7 @@
         private System.Windows.Forms.TextBox textbox_longitud;
         private System.Windows.Forms.ComboBox combobox_tipo;
         private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.ComboBox combobox_entidades1;
+        private System.Windows.Forms.ComboBox combobox_tablas_atributos;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.TextBox textbox_agregar_atributo;
