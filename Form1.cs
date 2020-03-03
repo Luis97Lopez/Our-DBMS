@@ -259,6 +259,7 @@ namespace proyecto_BDA
             boton_agregar_atributo.Enabled = valor;
             boton_modificar_atributo.Enabled = valor;
             boton_eliminar_atributo.Enabled = valor;
+            diccionario_atributos.ReadOnly = true;
         }
 
         private void boton_eliminar_atributo_Click(object sender, EventArgs e)

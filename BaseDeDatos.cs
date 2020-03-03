@@ -243,6 +243,7 @@ namespace proyecto_BDA
             {
                 var serializador = new BinaryFormatter();
                 archivoDeDatos = (ArchivoDeDatos)serializador.Deserialize(archivoDAT);
+                archivoDeDatos.NombreArchivo = nombreArchivoDeDatos;
             }
 
             return archivoDeDatos;
