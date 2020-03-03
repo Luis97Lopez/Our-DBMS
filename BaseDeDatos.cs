@@ -157,6 +157,7 @@ namespace proyecto_BDA
         {
             var archivoDeDatos = LeeArchivoDeDatos(Tablas[nomTabla]);
             var tabla = archivoDeDatos.Tabla;
+            tabla.Modificable = true;
 
             // Verifica que no se haya insertado ningún registro a
             // este archivo de datos.
@@ -174,6 +175,11 @@ namespace proyecto_BDA
             return res;
         }
 
+        /**
+         * Modifica un atributo en la tabla actual de esta base de 
+         * datos, siempre y cuando no se haya eliminado uno
+         * anteriormente.
+         **/
         public bool ModificaAtributo(string nomTabla, int indiceAtributo, Atributo atributoNuevo)
         {
             var archivoDeDatos = LeeArchivoDeDatos(Tablas[nomTabla]);
@@ -190,6 +196,9 @@ namespace proyecto_BDA
             return res;
         }
 
+        /**
+         * Elimina un atributo y bloquea la posibilidad de poder modificarlo en un futuro.
+         **/
         public void EliminaAtributo(string nomTabla, int indiceAtributo)
         {
             var archivoDeDatos = LeeArchivoDeDatos(Tablas[nomTabla]);
@@ -237,6 +246,38 @@ namespace proyecto_BDA
             }
 
             return archivoDeDatos;
+        }
+
+        public DataTable ObtenAtributos(string nomTabla)
+        {
+            var archivoDeDatos = LeeArchivoDeDatos(Tablas[nomTabla]);
+            var tabla = archivoDeDatos.Tabla;
+
+            DataTable tablaDatos = new DataTable();
+            string[] nomColumnas = { "Nombre", "Tipo de Dato", "Longitud", "Tipo de Llave" };
+
+            foreach (var nomColumna in nomColumnas)
+                tablaDatos.Columns.Add(nomColumna);
+
+            foreach (var atributo in tabla.Atributos)
+            {
+                DataRow dataRow = tablaDatos.NewRow();
+
+                dataRow["Nombre"] = atributo.Nombre;
+                dataRow["Tipo de Dato"] = atributo.Tipo;
+                dataRow["Longitud"] = atributo.Tamaño;
+
+                switch (atributo.Llave)
+                {
+                    case TipoLlave.Primaria: dataRow["Tipo de Llave"] = "Primaria"; break;
+                    case TipoLlave.Foranea: dataRow["Tipo de Llave"] = "Foránea"; break;
+                    case TipoLlave.SinLlave: dataRow["Tipo de Llave"] = "Ninguna"; break;
+                }
+
+                tablaDatos.Rows.Add(dataRow);
+            }
+
+            return tablaDatos;
         }
     }
 }

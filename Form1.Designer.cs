@@ -86,14 +86,10 @@
             this.label12 = new System.Windows.Forms.Label();
             this.boton_agregar_atributo = new System.Windows.Forms.Button();
             this.diccionario_atributos = new System.Windows.Forms.DataGridView();
-            this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Longitud = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TipoInd = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.label1 = new System.Windows.Forms.Label();
             this.vistas = new System.Windows.Forms.TabControl();
             ((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher1)).BeginInit();
@@ -156,14 +152,14 @@
             this.abrirToolStripMenuItem1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.abrirToolStripMenuItem1.Name = "abrirToolStripMenuItem1";
             this.abrirToolStripMenuItem1.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.abrirToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.abrirToolStripMenuItem1.Size = new System.Drawing.Size(156, 22);
             this.abrirToolStripMenuItem1.Text = "&Abrir";
             this.abrirToolStripMenuItem1.Click += new System.EventHandler(this.abrirToolStripMenuItem1_Click);
             // 
             // toolStripSeparator
             // 
             this.toolStripSeparator.Name = "toolStripSeparator";
-            this.toolStripSeparator.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator.Size = new System.Drawing.Size(153, 6);
             // 
             // guardarToolStripMenuItem
             // 
@@ -171,36 +167,36 @@
             this.guardarToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.guardarToolStripMenuItem.Name = "guardarToolStripMenuItem";
             this.guardarToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-            this.guardarToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.guardarToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
             this.guardarToolStripMenuItem.Text = "&Guardar";
             // 
             // guardarcomoToolStripMenuItem
             // 
             this.guardarcomoToolStripMenuItem.Name = "guardarcomoToolStripMenuItem";
-            this.guardarcomoToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.guardarcomoToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
             this.guardarcomoToolStripMenuItem.Text = "G&uardar como";
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(153, 6);
             // 
             // cerrarToolStripMenuItem
             // 
             this.cerrarToolStripMenuItem.Name = "cerrarToolStripMenuItem";
-            this.cerrarToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.cerrarToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
             this.cerrarToolStripMenuItem.Text = "Cerrar";
             this.cerrarToolStripMenuItem.Click += new System.EventHandler(this.cerrarToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(153, 6);
             // 
             // salirToolStripMenuItem
             // 
             this.salirToolStripMenuItem.Name = "salirToolStripMenuItem";
-            this.salirToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.salirToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
             this.salirToolStripMenuItem.Text = "&Salir";
             this.salirToolStripMenuItem.Click += new System.EventHandler(this.salirToolStripMenuItem_Click);
             // 
@@ -385,7 +381,7 @@
             this.tab_entidades.Padding = new System.Windows.Forms.Padding(3);
             this.tab_entidades.Size = new System.Drawing.Size(766, 384);
             this.tab_entidades.TabIndex = 0;
-            this.tab_entidades.Text = "Entidades";
+            this.tab_entidades.Text = "Tablas";
             // 
             // label_eliminar_tabla
             // 
@@ -519,6 +515,7 @@
             this.boton_modificar_atributo.TabIndex = 28;
             this.boton_modificar_atributo.Text = "Modificar Atributo";
             this.boton_modificar_atributo.UseVisualStyleBackColor = true;
+            this.boton_modificar_atributo.Click += new System.EventHandler(this.boton_modificar_atributo_Click);
             // 
             // label_atributo_actual
             // 
@@ -538,18 +535,16 @@
             this.boton_eliminar_atributo.TabIndex = 26;
             this.boton_eliminar_atributo.Text = "Eliminar Atributo";
             this.boton_eliminar_atributo.UseVisualStyleBackColor = true;
+            this.boton_eliminar_atributo.Click += new System.EventHandler(this.boton_eliminar_atributo_Click);
             // 
             // combobox_indice
             // 
             this.combobox_indice.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.combobox_indice.FormattingEnabled = true;
             this.combobox_indice.Items.AddRange(new object[] {
-            "0 - Sin Índice",
-            "1 - Clave Búsqueda",
-            "2 - Índice Primario",
-            "3 - Índice Secundario",
-            "4 - Índice Primario de Árbol B+",
-            "5 - Índice Primario de Árbol B+"});
+            "Sin llave",
+            "Llave primaria",
+            "Llave foránea"});
             this.combobox_indice.Location = new System.Drawing.Point(469, 20);
             this.combobox_indice.Name = "combobox_indice";
             this.combobox_indice.Size = new System.Drawing.Size(123, 21);
@@ -560,9 +555,9 @@
             this.label11.AutoSize = true;
             this.label11.Location = new System.Drawing.Point(385, 25);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(78, 13);
+            this.label11.Size = new System.Drawing.Size(75, 13);
             this.label11.TabIndex = 24;
-            this.label11.Text = "Tipo de Índice:";
+            this.label11.Text = "Tipo de Llave:";
             // 
             // label10
             // 
@@ -575,6 +570,7 @@
             // 
             // textbox_longitud
             // 
+            this.textbox_longitud.Enabled = false;
             this.textbox_longitud.Location = new System.Drawing.Point(252, 76);
             this.textbox_longitud.Name = "textbox_longitud";
             this.textbox_longitud.Size = new System.Drawing.Size(123, 20);
@@ -586,11 +582,13 @@
             this.combobox_tipo.FormattingEnabled = true;
             this.combobox_tipo.Items.AddRange(new object[] {
             "Entero",
+            "Flotante",
             "Cadena"});
             this.combobox_tipo.Location = new System.Drawing.Point(252, 51);
             this.combobox_tipo.Name = "combobox_tipo";
             this.combobox_tipo.Size = new System.Drawing.Size(123, 21);
             this.combobox_tipo.TabIndex = 21;
+            this.combobox_tipo.SelectedIndexChanged += new System.EventHandler(this.combobox_tipo_SelectedIndexChanged);
             // 
             // label9
             // 
@@ -609,6 +607,7 @@
             this.combobox_tablas_atributos.Name = "combobox_tablas_atributos";
             this.combobox_tablas_atributos.Size = new System.Drawing.Size(121, 21);
             this.combobox_tablas_atributos.TabIndex = 18;
+            this.combobox_tablas_atributos.SelectedIndexChanged += new System.EventHandler(this.combobox_tablas_atributos_SelectedIndexChanged);
             // 
             // label8
             // 
@@ -653,6 +652,7 @@
             this.boton_agregar_atributo.TabIndex = 15;
             this.boton_agregar_atributo.Text = "Agregar Atributo";
             this.boton_agregar_atributo.UseVisualStyleBackColor = true;
+            this.boton_agregar_atributo.Click += new System.EventHandler(this.boton_agregar_atributo_Click);
             // 
             // diccionario_atributos
             // 
@@ -663,26 +663,16 @@
             this.diccionario_atributos.BackgroundColor = System.Drawing.SystemColors.ButtonFace;
             this.diccionario_atributos.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.diccionario_atributos.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.dataGridViewTextBoxColumn1,
             this.dataGridViewTextBoxColumn2,
             this.dataGridViewTextBoxColumn3,
             this.Longitud,
-            this.dataGridViewTextBoxColumn4,
-            this.TipoInd,
-            this.dataGridViewTextBoxColumn5,
-            this.dataGridViewTextBoxColumn6});
+            this.TipoInd});
             this.diccionario_atributos.Location = new System.Drawing.Point(8, 105);
             this.diccionario_atributos.Name = "diccionario_atributos";
             this.diccionario_atributos.RowHeadersWidth = 5;
             this.diccionario_atributos.Size = new System.Drawing.Size(752, 270);
             this.diccionario_atributos.TabIndex = 11;
-            // 
-            // dataGridViewTextBoxColumn1
-            // 
-            this.dataGridViewTextBoxColumn1.HeaderText = "ID";
-            this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
-            this.dataGridViewTextBoxColumn1.ReadOnly = true;
-            this.dataGridViewTextBoxColumn1.Width = 21;
+            this.diccionario_atributos.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.diccionario_atributos_CellMouseDoubleClick);
             // 
             // dataGridViewTextBoxColumn2
             // 
@@ -703,31 +693,10 @@
             this.Longitud.HeaderText = "Longitud";
             this.Longitud.Name = "Longitud";
             // 
-            // dataGridViewTextBoxColumn4
-            // 
-            this.dataGridViewTextBoxColumn4.HeaderText = "Dirección";
-            this.dataGridViewTextBoxColumn4.Name = "dataGridViewTextBoxColumn4";
-            this.dataGridViewTextBoxColumn4.ReadOnly = true;
-            this.dataGridViewTextBoxColumn4.Width = 105;
-            // 
             // TipoInd
             // 
-            this.TipoInd.HeaderText = "Tipo de Índice";
+            this.TipoInd.HeaderText = "Tipo de Llave";
             this.TipoInd.Name = "TipoInd";
-            // 
-            // dataGridViewTextBoxColumn5
-            // 
-            this.dataGridViewTextBoxColumn5.HeaderText = "Dirección Índice";
-            this.dataGridViewTextBoxColumn5.Name = "dataGridViewTextBoxColumn5";
-            this.dataGridViewTextBoxColumn5.ReadOnly = true;
-            this.dataGridViewTextBoxColumn5.Width = 105;
-            // 
-            // dataGridViewTextBoxColumn6
-            // 
-            this.dataGridViewTextBoxColumn6.HeaderText = "Siguiente Atributo";
-            this.dataGridViewTextBoxColumn6.Name = "dataGridViewTextBoxColumn6";
-            this.dataGridViewTextBoxColumn6.ReadOnly = true;
-            this.dataGridViewTextBoxColumn6.Width = 105;
             // 
             // label1
             // 
@@ -828,14 +797,6 @@
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Button boton_agregar_atributo;
         private System.Windows.Forms.DataGridView diccionario_atributos;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Longitud;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
-        private System.Windows.Forms.DataGridViewTextBoxColumn TipoInd;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn5;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn6;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TabPage vista_datos;
         private System.Windows.Forms.Label label15;
@@ -850,6 +811,10 @@
         private System.Windows.Forms.Button boton_eliminar_bd;
         private System.Windows.Forms.Button modificar_bd;
         private System.Windows.Forms.TextBox textbox_modificar_bd;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Longitud;
+        private System.Windows.Forms.DataGridViewTextBoxColumn TipoInd;
     }
 }
 
