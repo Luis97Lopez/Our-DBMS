@@ -18,6 +18,14 @@ namespace proyecto_BDA
         {
             InitializeComponent();
             Habilita(false);
+
+            BaseDeDatos2 bd2 = new BaseDeDatos2("BDDelBribon");
+            bd2.AgregaTabla("EstudianteBribon");
+            bd2.AgregaTabla("ProfesorBribon");
+            bd2.AgregaTabla("AdministrativoBribon");
+
+            DataColumn column = new DataColumn { ColumnName = "Nombre", DataType = Type.GetType("System.String"), MaxLength = 35 };
+            bd2.AgregaAtributo("AdministrativoBribon", column);
         }
 
         private void nuevoToolStripMenuItem1_Click(object sender, EventArgs e)
