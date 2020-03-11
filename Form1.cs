@@ -18,14 +18,6 @@ namespace proyecto_BDA
         {
             InitializeComponent();
             Habilita(false);
-
-            BaseDeDatos2 bd2 = new BaseDeDatos2("BDDelBribon");
-            bd2.AgregaTabla("EstudianteBribon");
-            bd2.AgregaTabla("ProfesorBribon");
-            bd2.AgregaTabla("AdministrativoBribon");
-
-            DataColumn column = new DataColumn { ColumnName = "Nombre", DataType = Type.GetType("System.String"), MaxLength = 35 };
-            bd2.AgregaAtributo("AdministrativoBribon", column);
         }
 
         private void nuevoToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -49,13 +41,14 @@ namespace proyecto_BDA
                 list_tablas.Items.Clear();
                 combobox_tablas_atributos.Items.Clear();
 
-                foreach (var item in BaseDeDatos.Tablas)
+                foreach (var item in BaseDeDatos.Set.Tables)
                 {
-                    string[] subitems = new string[] {item.Key, item.Value };
+                    string ruta = BaseDeDatos.NombreBaseDeDatos + "\\" + item.ToString() + ".dat";
+                    string[] subitems = new string[] { item.ToString(), ruta };
                     ListViewItem list = new ListViewItem(subitems);
                     list_tablas.Items.Add(list);
 
-                    combobox_tablas_atributos.Items.Add(item.Key);
+                    combobox_tablas_atributos.Items.Add(item.ToString());
                 }
             }
             else
@@ -86,16 +79,14 @@ namespace proyecto_BDA
 
         private void boton_agregar_tabla_Click(object sender, EventArgs e)
         {
-            if (BaseDeDatos != null)
+            if (BaseDeDatos != null && !string.IsNullOrEmpty(textbox_agregar_tabla.Text))
             {
-                if (textbox_agregar_tabla.Text != "")
+                try { BaseDeDatos.AgregaTabla(textbox_agregar_tabla.Text); }
+                catch (DuplicateNameException)
                 {
-                    if(BaseDeDatos.AgregaTabla(textbox_agregar_tabla.Text))
-                    {
-                        textbox_agregar_tabla.Text = "";
-                        Invalidate();
-                    }
+                    MessageBox.Show("Ya existe una tabla con ese nombre", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
+                finally { Invalidate(); }
             }
         }
 
@@ -106,11 +97,17 @@ namespace proyecto_BDA
                 string nombreAnterior = list_tablas.SelectedItems[0].Text;
                 string nombreNuevo = textbox_actualizar_tabla.Text;
 
-                BaseDeDatos.ModificaNombreTabla(nombreAnterior, nombreNuevo);
-
-                textbox_actualizar_tabla.Text = "";
-                label_eliminar_tabla.Text = "-";
-                Invalidate();
+                try { BaseDeDatos.ModificaNombreTabla(nombreAnterior, nombreNuevo); }
+                catch (DuplicateNameException)
+                {
+                    MessageBox.Show("Ya existe una tabla con ese nombre", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                finally 
+                {
+                    textbox_actualizar_tabla.Text = "";
+                    label_eliminar_tabla.Text = "-";
+                    Invalidate();
+                }
             }
         }
 
@@ -150,10 +147,7 @@ namespace proyecto_BDA
             }
         }
 
-        private void salirToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
+        private void SalirToolStripMenuItem_Click(object sender, EventArgs e) => Close();
 
         private void boton_eliminar_tabla_Click(object sender, EventArgs e)
         {
@@ -172,30 +166,10 @@ namespace proyecto_BDA
             diccionario_atributos.Columns.Clear();
             diccionario_atributos.DataSource = BaseDeDatos.ObtenAtributos(combobox_tablas_atributos.SelectedItem.ToString());
         }
-
-        private void boton_agregar_atributo_Click(object sender, EventArgs e)
-        {
-            if (!ModificaAtributos())
-                return;
-
-            TipoLlave llave = TipoLlave.SinLlave;
-            string nomTabla = combobox_tablas_atributos.SelectedItem.ToString();
-            switch (combobox_indice.SelectedIndex)
-            {
-                case 0: llave = TipoLlave.SinLlave; break;
-                case 1: llave = TipoLlave.Primaria; break;
-                case 2: llave = TipoLlave.Foranea; break;
-            }
-
-            Atributo atributo = new Atributo(textbox_agregar_atributo.Text, combobox_tipo.SelectedItem.ToString(), int.Parse(textbox_longitud.Text), llave);
-            BaseDeDatos.AgregaAtributo(nomTabla, atributo);
-            diccionario_atributos.DataSource = BaseDeDatos.ObtenAtributos(combobox_tablas_atributos.SelectedItem.ToString());
-        }
-
         private void combobox_tipo_SelectedIndexChanged(object sender, EventArgs e)
         {
             textbox_longitud.Enabled = combobox_tipo.SelectedIndex == 2;
-            textbox_longitud.Text = !textbox_longitud.Enabled ? "4" : "";
+            textbox_longitud.Text = !textbox_longitud.Enabled ? sizeof(int).ToString() : "";
         }
 
         private void diccionario_atributos_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
@@ -221,33 +195,6 @@ namespace proyecto_BDA
                 case "Foránea": combobox_indice.SelectedIndex = 2; break;
             }
         }
-
-        private void boton_modificar_atributo_Click(object sender, EventArgs e)
-        {
-            int numTupla = diccionario_atributos.CurrentCell.RowIndex;
-            bool res = ModificaAtributos() && numTupla >= 0;
-
-            if (!res)
-                return;
-
-            TipoLlave llave = TipoLlave.SinLlave;
-            string nomTabla = combobox_tablas_atributos.SelectedItem.ToString();
-
-            switch (combobox_indice.SelectedIndex)
-            {
-                case 0: llave = TipoLlave.SinLlave; break;
-                case 1: llave = TipoLlave.Primaria; break;
-                case 2: llave = TipoLlave.Foranea; break;
-            }
-
-            Atributo atributo = new Atributo(textbox_agregar_atributo.Text, combobox_tipo.SelectedItem.ToString(), int.Parse(textbox_longitud.Text), llave);
-            
-            if (BaseDeDatos.ModificaAtributo(nomTabla, numTupla, atributo))
-                diccionario_atributos.DataSource = BaseDeDatos.ObtenAtributos(combobox_tablas_atributos.SelectedItem.ToString());
-            else
-                MessageBox.Show("No puedes eliminar y modificar en cascada", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        }
-
         /**
          * Habilita/deshabilita los botones/controles del programa. 
          * Este método es preventivo ;v
@@ -269,11 +216,58 @@ namespace proyecto_BDA
             boton_eliminar_atributo.Enabled = valor;
             diccionario_atributos.ReadOnly = true;
         }
+        private void boton_agregar_atributo_Click(object sender, EventArgs e)
+        {
+            if (!ModificaAtributos())
+                return;
 
+            DataColumn atributo = CreaAtributo();
+
+            try
+            {
+                string nomTabla = combobox_tablas_atributos.SelectedItem.ToString();
+                BaseDeDatos.AgregaAtributo(nomTabla, atributo);
+
+                if (combobox_indice.SelectedIndex == 1)
+                    BaseDeDatos.AgregaLlavePrimaria(nomTabla, atributo);
+            }
+            catch (DuplicateNameException)
+            {
+                MessageBox.Show("Ya existe un atributo con ese nombre", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                diccionario_atributos.DataSource = BaseDeDatos.ObtenAtributos(combobox_tablas_atributos.SelectedItem.ToString());
+            }
+        }
+        private void boton_modificar_atributo_Click(object sender, EventArgs e)
+        {
+            int numTupla = diccionario_atributos.CurrentCell.RowIndex;
+            bool res = ModificaAtributos() && numTupla >= 0;
+
+            if (!res)
+                return;
+
+            DataColumn atributo = CreaAtributo();
+
+            try
+            {
+                string nomTabla = combobox_tablas_atributos.SelectedItem.ToString();
+                string nomAtributo = diccionario_atributos.Rows[numTupla].Cells["Nombre"].Value.ToString();
+                BaseDeDatos.ModificaAtributo(nomTabla, nomAtributo, atributo);
+            }
+            catch (DuplicateNameException)
+            {
+                MessageBox.Show("Ya existe un atributo con ese nombre", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                diccionario_atributos.DataSource = BaseDeDatos.ObtenAtributos(combobox_tablas_atributos.SelectedItem.ToString());
+            }
+        }
         private void boton_eliminar_atributo_Click(object sender, EventArgs e)
         {
             int numTupla = diccionario_atributos.CurrentCell.RowIndex;
-
             bool res = combobox_tablas_atributos.SelectedIndex >= 0 && combobox_indice.SelectedIndex >= 0;
             res &= numTupla >= 0;
 
@@ -284,8 +278,27 @@ namespace proyecto_BDA
             }
 
             string nomTabla = combobox_tablas_atributos.SelectedItem.ToString();
-            BaseDeDatos.EliminaAtributo(nomTabla, numTupla);
+            string nomAtributo = diccionario_atributos.Rows[numTupla].Cells["Nombre"].Value.ToString();
+            
+            BaseDeDatos.EliminaAtributo(nomTabla, nomAtributo);
             diccionario_atributos.DataSource = BaseDeDatos.ObtenAtributos(combobox_tablas_atributos.SelectedItem.ToString());
+        }
+
+        private DataColumn CreaAtributo()
+        {
+            string texto = combobox_tipo.SelectedItem.ToString();
+            DataColumn atributo = new DataColumn(textbox_agregar_atributo.Text)
+            {
+                DataType = Type.GetType("System." + (texto.Equals("Cadena") ? "String" :
+                                                     texto.Equals("Entero") ? "Int32" :
+                                                     "Single")),
+                Unique = combobox_indice.SelectedIndex == 1,
+            };
+
+            if (texto.Equals("Cadena"))
+                atributo.MaxLength = int.Parse(textbox_longitud.Text);
+
+            return atributo;
         }
 
         private bool ModificaAtributos()

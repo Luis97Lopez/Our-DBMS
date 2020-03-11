@@ -12,28 +12,27 @@ namespace proyecto_BDA
     class BaseDeDatos
     {
         /**
-         * Clase que permite manejar y coleccionar archivos en
-         * un repositorio (carpeta). 
-         *   ________________________
-         *  /                        \
-         * |                          |
-         * |\________________________/|
-         * |                          |
-         * |\________________________/|
-         * |                          |
-         * |\________________________/|
-         * |                          |
-         * \__________________________/
-         *
-         **/
-
+          * Clase que permite manejar y coleccionar archivos en
+          * un repositorio (carpeta). 
+          *   ________________________
+          *  /                        \
+          * |                          |
+          * |\________________________/|
+          * |                          |
+          * |\________________________/|
+          * |                          |
+          * |\________________________/|
+          * |                          |
+          * \__________________________/
+          *
+          **/
         private string nombreBaseDeDatos;
         // Nombre de la carpeta con los archivos de datos.
         public string NombreBaseDeDatos
         {
             // Obtiene el nombre de la base de datos.
             get => nombreBaseDeDatos;
-            
+
             // Modifica el nombre de la base de datos.
             // Si éste cambia, se debe de renombrar el
             // directorio.
@@ -41,14 +40,13 @@ namespace proyecto_BDA
             {
                 Directory.Move(nombreBaseDeDatos, value);
                 nombreBaseDeDatos = value;
-                this.LeeTablas();
+                LeeTablas();
             }
         }
 
-        // Claves de las tablas y el nombre de su archivo
-        // correspondiente.
-        public SortedDictionary<string, string> Tablas { get; }
-    
+        // Almacén de datos.
+        public DataSet Set { get; set; }
+
         /**
          * Crea una nueva base de datos y se le asigna su
          * nombre correspondiente. Si no existe, crea una
@@ -58,7 +56,7 @@ namespace proyecto_BDA
         public BaseDeDatos(string nombre)
         {
             nombreBaseDeDatos = nombre;
-            Tablas = new SortedDictionary<string, string>();
+            Set = new DataSet(nombre);
 
             if (Directory.Exists(NombreBaseDeDatos))
                 // Ya existe una base de datos con ese nombre.
@@ -78,10 +76,15 @@ namespace proyecto_BDA
             var archivosDeDatos = Directory.EnumerateFiles(NombreBaseDeDatos, "*.dat", SearchOption.AllDirectories);
 
             foreach (var archivoDeDatos in archivosDeDatos)
-            { 
-                // Obtiene el nombre de la tabla.
-                string nomTabla = Path.GetFileName(archivoDeDatos).Replace(".dat", "");
-                Tablas[nomTabla] = archivoDeDatos;
+            {
+
+                // Carga los archivos de datos correspondientes a cada
+                // tabla.
+                using (var archivoDAT = new FileStream(archivoDeDatos, FileMode.Open))
+                {
+                    var deserializador = new BinaryFormatter();
+                    Set.Tables.Add((DataTable)deserializador.Deserialize(archivoDAT));
+                }
             }
         }
 
@@ -89,63 +92,35 @@ namespace proyecto_BDA
          * Agrega una tabla nueva a la base de datos, siempre y
          * cuando no exista una con el mismo nombre.
          **/
-        public bool AgregaTabla(string nomTabla)
+        public void AgregaTabla(string nomTabla)
         {
-            // Verifica si la tabla no existe, de no ser así,
-            // no se genera un archivo de datos nuevo.
-            bool res = !Tablas.ContainsKey(nomTabla);
-
-            if (res)
-            {
-                // Crea el archivo de datos de la tabla nueva.
-                Tablas[nomTabla] = NombreBaseDeDatos + "\\" + nomTabla + ".dat";
-                GuardaArchivoDeDatos(new ArchivoDeDatos(Tablas[nomTabla], new Tabla(nomTabla)));
-            }
-
-            return res;
+            DataTable tablaNueva = new DataTable(nomTabla);
+            Set.Tables.Add(tablaNueva);
+            nomTabla = NombreBaseDeDatos + "\\" + nomTabla + ".dat";
+            GuardaArchivoDeDatos(tablaNueva, nomTabla);
         }
 
         /**
          * Modifica el nombre de una tabla de la base de datos
          **/
-        public bool ModificaNombreTabla(string nomTablaAnterior, string nomTablaNuevo)
+        public void ModificaNombreTabla(string nomTablaAnterior, string nomTablaNueva)
         {
-            // Verifica si la tabla existe
-            bool res = Tablas.ContainsKey(nomTablaAnterior);
+            var tablas = Set.Tables;
 
-            if (res)
-            {
-                // Obtiene la ruta a modificar y la ruta nueva. Para
-                // utilizar le método Move de File.
-                string rutaAnterior = Tablas[nomTablaAnterior];
-                Tablas.Remove(nomTablaAnterior);
-                string rutaNueva = Tablas[nomTablaNuevo] = NombreBaseDeDatos + "\\" + nomTablaNuevo + ".dat";
+            tablas.Add(nomTablaNueva);
+            tablas[nomTablaNueva].Merge(tablas[nomTablaAnterior]);
 
-                File.Move(rutaAnterior, rutaNueva);
-            }
-
-            return res;
+            EliminaTabla(nomTablaAnterior);
+            GuardaArchivoDeDatos(tablas[nomTablaNueva], NombreBaseDeDatos + "\\" + nomTablaNueva + ".dat");
         }
 
         /**
          * Elimina la tabla de la base de datos
          **/
-        public bool EliminaTabla(string nomTabla)
+        public void EliminaTabla(string nomTabla)
         {
-            // Verifica si la tabla existe
-            bool res = Tablas.ContainsKey(nomTabla);
-
-            if (res)
-            {
-                // Obtiene la ruta a modificar y la ruta nueva. Para
-                // utilizar le método Move de File.
-                string ruta = Tablas[nomTabla];
-                File.Delete(ruta);
-                
-                Tablas.Remove(nomTabla);
-            }
-
-            return res;
+            Set.Tables.Remove(nomTabla);
+            File.Delete(NombreBaseDeDatos + "\\" + nomTabla + ".dat");
         }
 
         /**
@@ -153,26 +128,11 @@ namespace proyecto_BDA
          * siempre y cuando a la tabla no se le haya agregado ningún
          * registro.
          **/
-        public bool AgregaAtributo(string nomTabla, Atributo atributo)
+        public void AgregaAtributo(string nomTabla, DataColumn columna)
         {
-            var archivoDeDatos = LeeArchivoDeDatos(Tablas[nomTabla]);
-            var tabla = archivoDeDatos.Tabla;
-            tabla.Modificable = true;
-
-            // Verifica que no se haya insertado ningún registro a
-            // este archivo de datos.
-            bool res = tabla.Editable;
-            res &= atributo.Llave != TipoLlave.Primaria || (atributo.Llave == TipoLlave.Primaria && !tabla.ContieneLlavePrimaria());
-
-            if (res)
-            {
-                // Agrega el atributo y actualiza el archivo de
-                // datos.
-                tabla.Atributos.Add(atributo);
-                GuardaArchivoDeDatos(archivoDeDatos);
-            }
-
-            return res;
+            var tablas = Set.Tables;
+            tablas[nomTabla].Columns.Add(columna);
+            GuardaArchivoDeDatos(tablas[nomTabla], NombreBaseDeDatos + "\\" + nomTabla + ".dat");
         }
 
         /**
@@ -180,79 +140,97 @@ namespace proyecto_BDA
          * datos, siempre y cuando no se haya eliminado uno
          * anteriormente.
          **/
-        public bool ModificaAtributo(string nomTabla, int indiceAtributo, Atributo atributoNuevo)
+        public void ModificaAtributo(string nomTabla, string nomAtributo, DataColumn atributoNuevo)
         {
-            var archivoDeDatos = LeeArchivoDeDatos(Tablas[nomTabla]);
-            var tabla = archivoDeDatos.Tabla;
-
-            bool res = tabla.Modificable;
-
-            if (res)
-            {
-                tabla.Atributos[indiceAtributo] = atributoNuevo;
-                GuardaArchivoDeDatos(archivoDeDatos);
-            }
-
-            return res;
+            var tablas = Set.Tables;
+            
+            tablas[nomTabla].Columns.Add(atributoNuevo);
+            tablas[nomTabla].Columns.Remove(nomAtributo);
+            
+            GuardaArchivoDeDatos(tablas[nomTabla], NombreBaseDeDatos + "\\" + nomTabla + ".dat");
         }
 
         /**
          * Elimina un atributo y bloquea la posibilidad de poder modificarlo en un futuro.
          **/
-        public void EliminaAtributo(string nomTabla, int indiceAtributo)
+        public void EliminaAtributo(string nomTabla, string nomAtributo)
         {
-            var archivoDeDatos = LeeArchivoDeDatos(Tablas[nomTabla]);
-            var tabla = archivoDeDatos.Tabla;
-
-            tabla.Atributos.RemoveAt(indiceAtributo);
-            tabla.Modificable = false;
-
-            GuardaArchivoDeDatos(archivoDeDatos);
+            var tablas = Set.Tables;
+            tablas[nomTabla].Columns.Remove(nomAtributo);
+            GuardaArchivoDeDatos(tablas[nomTabla], NombreBaseDeDatos + "\\" + nomTabla + ".dat");
         }
 
-        public void AgregaRegistro(string nomTabla, IComparable[] registro)
+        /**
+         * Verifica que no exista una llave primaria.
+         **/
+        public bool ContieneLlavePrimaria(string nomTabla)
         {
-            var archivoDeDatos = LeeArchivoDeDatos(Tablas[nomTabla]);
-            
-            archivoDeDatos.AgregaRegistro(registro);
-            GuardaArchivoDeDatos(archivoDeDatos);
+            bool res = false;
+
+            for (int i = 0; i < Set.Tables[nomTabla].Constraints.Count && !res; i++)
+                res = Set.Tables[nomTabla].Constraints[i] is UniqueConstraint;
+
+            return res;
+        }
+
+        /**
+         * Agrega una llave primaria a una tabla.
+         **/
+        public void AgregaLlavePrimaria(string nomTabla, DataColumn llavePrimaria)
+        {
+            var tablas = Set.Tables;
+            string nombreLlave = llavePrimaria.ColumnName;
+            tablas[nomTabla].Constraints.Add(new UniqueConstraint(nombreLlave, llavePrimaria));
+            GuardaArchivoDeDatos(tablas[nomTabla], NombreBaseDeDatos + "\\" + nomTabla + ".dat");
+        }
+
+        /**
+         * Agrega una llave foránea, asociando una tabla con otra.
+         **/
+        public void AgregaLlaveForanea(string nomTabla, DataColumn llavePrimaria, DataColumn llaveForanea)
+        {
+            var tablas = Set.Tables;
+            string nombreLlave = llavePrimaria.ColumnName;
+
+            // Relaciona la llave primaria de un atributo de una tabla
+            // con la llave foránea de esta tabla.
+            tablas[nomTabla].Constraints.Add(nombreLlave, llavePrimaria, llaveForanea);
+            var restriccion = tablas[nomTabla].Constraints[nombreLlave] as ForeignKeyConstraint;
+
+            // Establece las reglas de modificación y eliminación.
+            restriccion.UpdateRule = Rule.Cascade;
+            restriccion.DeleteRule = Rule.SetNull;
+        }
+
+        /**
+         * Agrega un registro a una tabla.
+         **/
+        public void AgregaRegistro(string nomTabla, DataRow registro)
+        {
+            var tablas = Set.Tables;
+            tablas[nomTabla].Rows.Add(registro);
         }
 
         /**
          * Guarda/Actualiza el archivo de datos en la base de
          * datos.
          **/
-        private void GuardaArchivoDeDatos(ArchivoDeDatos archivoDeDatos)
+        private void GuardaArchivoDeDatos(DataTable tabla, string nombreTabla)
         {
-            using (var archivoDAT = new FileStream(archivoDeDatos.NombreArchivo, FileMode.OpenOrCreate))
+            using (var archivoDAT = new FileStream(nombreTabla, FileMode.OpenOrCreate))
             {
                 var serializador = new BinaryFormatter();
-                serializador.Serialize(archivoDAT, archivoDeDatos);
+                serializador.Serialize(archivoDAT, tabla);
             }
         }
 
         /**
-         * Lee el archivo de datos encontrado dentro de la base
-         * de datos.
-         **/
-        private ArchivoDeDatos LeeArchivoDeDatos(string nombreArchivoDeDatos)
-        {
-            ArchivoDeDatos archivoDeDatos = null;
-
-            using (var archivoDAT = new FileStream(nombreArchivoDeDatos, FileMode.Open))
-            {
-                var serializador = new BinaryFormatter();
-                archivoDeDatos = (ArchivoDeDatos)serializador.Deserialize(archivoDAT);
-                archivoDeDatos.NombreArchivo = nombreArchivoDeDatos;
-            }
-
-            return archivoDeDatos;
-        }
-
+         * Obtiene las columnas que representan a una
+         * tabla en la base de datos.
+         **/ 
         public DataTable ObtenAtributos(string nomTabla)
         {
-            var archivoDeDatos = LeeArchivoDeDatos(Tablas[nomTabla]);
-            var tabla = archivoDeDatos.Tabla;
+            var tabla = Set.Tables[nomTabla];
 
             DataTable tablaDatos = new DataTable();
             string[] nomColumnas = { "Nombre", "Tipo de Dato", "Longitud", "Tipo de Llave" };
@@ -260,20 +238,22 @@ namespace proyecto_BDA
             foreach (var nomColumna in nomColumnas)
                 tablaDatos.Columns.Add(nomColumna);
 
-            foreach (var atributo in tabla.Atributos)
+            foreach (DataColumn atributo in tabla.Columns)
             {
                 DataRow dataRow = tablaDatos.NewRow();
+                dataRow["Nombre"] = atributo.ColumnName;
+                dataRow["Tipo de Dato"] = atributo.DataType;
+                dataRow["Longitud"] = atributo.MaxLength == - 1 ? "" : atributo.MaxLength.ToString();
 
-                dataRow["Nombre"] = atributo.Nombre;
-                dataRow["Tipo de Dato"] = atributo.Tipo;
-                dataRow["Longitud"] = atributo.Tamaño;
-
-                switch (atributo.Llave)
+                if (tabla.Constraints.Contains(atributo.ColumnName))
                 {
-                    case TipoLlave.Primaria: dataRow["Tipo de Llave"] = "Primaria"; break;
-                    case TipoLlave.Foranea: dataRow["Tipo de Llave"] = "Foránea"; break;
-                    case TipoLlave.SinLlave: dataRow["Tipo de Llave"] = "Ninguna"; break;
+                    string nomLlave = atributo.ColumnName;
+                    dataRow["Tipo de Llave"] = tabla.Constraints[nomLlave] is ForeignKeyConstraint
+                                             ? "Foránea"
+                                             : "Primaria";
                 }
+                else
+                    dataRow["Tipo de Llave"] = "Sin llave";
 
                 tablaDatos.Rows.Add(dataRow);
             }
