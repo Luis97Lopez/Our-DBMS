@@ -142,7 +142,7 @@
             this.nuevoToolStripMenuItem1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.nuevoToolStripMenuItem1.Name = "nuevoToolStripMenuItem1";
             this.nuevoToolStripMenuItem1.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
-            this.nuevoToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.nuevoToolStripMenuItem1.Size = new System.Drawing.Size(156, 22);
             this.nuevoToolStripMenuItem1.Text = "&Nuevo";
             this.nuevoToolStripMenuItem1.Click += new System.EventHandler(this.nuevoToolStripMenuItem1_Click);
             // 
@@ -410,7 +410,7 @@
             // 
             // fileName
             // 
-            this.fileName.Text = "File Name";
+            this.fileName.Text = "Table Name";
             this.fileName.Width = 100;
             // 
             // Path
