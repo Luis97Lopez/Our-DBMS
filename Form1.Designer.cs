@@ -92,6 +92,11 @@
             this.TipoInd = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.label1 = new System.Windows.Forms.Label();
             this.vistas = new System.Windows.Forms.TabControl();
+            this.vista_consultas = new System.Windows.Forms.TabPage();
+            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.boton_consulta = new System.Windows.Forms.Button();
+            this.consulta = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher1)).BeginInit();
             this.menu.SuspendLayout();
             this.vista_datos.SuspendLayout();
@@ -103,6 +108,8 @@
             this.tab_atributos.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.diccionario_atributos)).BeginInit();
             this.vistas.SuspendLayout();
+            this.vista_consultas.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
             // fileSystemWatcher1
@@ -712,11 +719,68 @@
             this.vistas.CausesValidation = false;
             this.vistas.Controls.Add(this.vista_dd);
             this.vistas.Controls.Add(this.vista_datos);
+            this.vistas.Controls.Add(this.vista_consultas);
             this.vistas.Location = new System.Drawing.Point(0, 27);
             this.vistas.Name = "vistas";
             this.vistas.SelectedIndex = 0;
             this.vistas.Size = new System.Drawing.Size(794, 469);
             this.vistas.TabIndex = 13;
+            // 
+            // vista_consultas
+            // 
+            this.vista_consultas.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.vista_consultas.Controls.Add(this.label2);
+            this.vista_consultas.Controls.Add(this.consulta);
+            this.vista_consultas.Controls.Add(this.dataGridView1);
+            this.vista_consultas.Controls.Add(this.boton_consulta);
+            this.vista_consultas.Location = new System.Drawing.Point(4, 22);
+            this.vista_consultas.Name = "vista_consultas";
+            this.vista_consultas.Padding = new System.Windows.Forms.Padding(3);
+            this.vista_consultas.Size = new System.Drawing.Size(786, 443);
+            this.vista_consultas.TabIndex = 2;
+            this.vista_consultas.Text = "Consultas SQL";
+            // 
+            // dataGridView1
+            // 
+            this.dataGridView1.AllowUserToAddRows = false;
+            this.dataGridView1.AllowUserToDeleteRows = false;
+            this.dataGridView1.AllowUserToResizeColumns = false;
+            this.dataGridView1.AllowUserToResizeRows = false;
+            this.dataGridView1.BackgroundColor = System.Drawing.SystemColors.ButtonFace;
+            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView1.GridColor = System.Drawing.SystemColors.ButtonFace;
+            this.dataGridView1.Location = new System.Drawing.Point(25, 90);
+            this.dataGridView1.MultiSelect = false;
+            this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.ReadOnly = true;
+            this.dataGridView1.Size = new System.Drawing.Size(739, 329);
+            this.dataGridView1.TabIndex = 32;
+            // 
+            // boton_consulta
+            // 
+            this.boton_consulta.Location = new System.Drawing.Point(641, 40);
+            this.boton_consulta.Name = "boton_consulta";
+            this.boton_consulta.Size = new System.Drawing.Size(123, 23);
+            this.boton_consulta.TabIndex = 29;
+            this.boton_consulta.Text = "Consultar";
+            this.boton_consulta.UseVisualStyleBackColor = true;
+            // 
+            // consulta
+            // 
+            this.consulta.Location = new System.Drawing.Point(25, 43);
+            this.consulta.Name = "consulta";
+            this.consulta.Size = new System.Drawing.Size(551, 20);
+            this.consulta.TabIndex = 33;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(22, 27);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(60, 13);
+            this.label2.TabIndex = 34;
+            this.label2.Text = "Consulta:";
             // 
             // Form1
             // 
@@ -746,6 +810,9 @@
             this.tab_atributos.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.diccionario_atributos)).EndInit();
             this.vistas.ResumeLayout(false);
+            this.vista_consultas.ResumeLayout(false);
+            this.vista_consultas.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -767,6 +834,10 @@
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
         private System.Windows.Forms.TabControl vistas;
         private System.Windows.Forms.TabPage vista_dd;
+        private System.Windows.Forms.Label label_bd;
+        private System.Windows.Forms.Button boton_eliminar_bd;
+        private System.Windows.Forms.Button modificar_bd;
+        private System.Windows.Forms.TextBox textbox_modificar_bd;
         private System.Windows.Forms.TabControl tabs;
         private System.Windows.Forms.TabPage tab_entidades;
         private System.Windows.Forms.Label label_eliminar_tabla;
@@ -797,6 +868,10 @@
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Button boton_agregar_atributo;
         private System.Windows.Forms.DataGridView diccionario_atributos;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Longitud;
+        private System.Windows.Forms.DataGridViewTextBoxColumn TipoInd;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TabPage vista_datos;
         private System.Windows.Forms.Label label15;
@@ -807,14 +882,11 @@
         private System.Windows.Forms.ComboBox combobox_entidades2;
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.DataGridView grid_insertar_datos;
-        private System.Windows.Forms.Label label_bd;
-        private System.Windows.Forms.Button boton_eliminar_bd;
-        private System.Windows.Forms.Button modificar_bd;
-        private System.Windows.Forms.TextBox textbox_modificar_bd;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Longitud;
-        private System.Windows.Forms.DataGridViewTextBoxColumn TipoInd;
+        private System.Windows.Forms.TabPage vista_consultas;
+        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.Button boton_consulta;
+        private System.Windows.Forms.TextBox consulta;
+        private System.Windows.Forms.Label label2;
     }
 }
 
