@@ -143,7 +143,6 @@ namespace proyecto_BDA
         public void ModificaAtributo(string nomTabla, string nomAtributo, DataColumn atributoNuevo)
         {
             var tablas = Set.Tables;
-            
             tablas[nomTabla].Columns.Add(atributoNuevo);
             tablas[nomTabla].Columns.Remove(nomAtributo);
             
@@ -156,6 +155,14 @@ namespace proyecto_BDA
         public void EliminaAtributo(string nomTabla, string nomAtributo)
         {
             var tablas = Set.Tables;
+
+            if (tablas[nomTabla].Constraints.Contains(nomAtributo))
+                tablas[nomTabla].Constraints.Remove(nomAtributo);
+
+            if (tablas[nomTabla].PrimaryKey.Length == 1
+                && tablas[nomTabla].PrimaryKey[0].ColumnName.Equals(nomAtributo))
+                tablas[nomTabla].PrimaryKey = new DataColumn[] { };
+            
             tablas[nomTabla].Columns.Remove(nomAtributo);
             GuardaArchivoDeDatos(tablas[nomTabla], NombreBaseDeDatos + "\\" + nomTabla + ".dat");
         }
@@ -163,15 +170,7 @@ namespace proyecto_BDA
         /**
          * Verifica que no exista una llave primaria.
          **/
-        public bool ContieneLlavePrimaria(string nomTabla)
-        {
-            bool res = false;
-
-            for (int i = 0; i < Set.Tables[nomTabla].Constraints.Count && !res; i++)
-                res = Set.Tables[nomTabla].Constraints[i] is UniqueConstraint;
-
-            return res;
-        }
+        public bool ContieneLlavePrimaria(string nomTabla) => Set.Tables[nomTabla].PrimaryKey.Length == 0;
 
         /**
          * Agrega una llave primaria a una tabla.
@@ -179,8 +178,7 @@ namespace proyecto_BDA
         public void AgregaLlavePrimaria(string nomTabla, DataColumn llavePrimaria)
         {
             var tablas = Set.Tables;
-            string nombreLlave = llavePrimaria.ColumnName;
-            tablas[nomTabla].Constraints.Add(new UniqueConstraint(nombreLlave, llavePrimaria));
+            tablas[nomTabla].PrimaryKey = new DataColumn[] { llavePrimaria };
             GuardaArchivoDeDatos(tablas[nomTabla], NombreBaseDeDatos + "\\" + nomTabla + ".dat");
         }
 
@@ -199,7 +197,7 @@ namespace proyecto_BDA
 
             // Establece las reglas de modificación y eliminación.
             restriccion.UpdateRule = Rule.Cascade;
-            restriccion.DeleteRule = Rule.SetNull;
+            restriccion.DeleteRule = Rule.Cascade;
         }
 
         /**
@@ -248,12 +246,13 @@ namespace proyecto_BDA
                 if (tabla.Constraints.Contains(atributo.ColumnName))
                 {
                     string nomLlave = atributo.ColumnName;
-                    dataRow["Tipo de Llave"] = tabla.Constraints[nomLlave] is ForeignKeyConstraint
-                                             ? "Foránea"
-                                             : "Primaria";
-                }
+                    dataRow["Tipo de Llave"] = "Foránea";
+                } 
+                else if (tabla.PrimaryKey.Length == 1
+                        && tabla.PrimaryKey[0].ColumnName.Equals(atributo.ColumnName))
+                    dataRow["Tipo de Llave"] = "Primaria";
                 else
-                    dataRow["Tipo de Llave"] = "Sin llave";
+                    dataRow["Tipo de Llave"] = "Sin Llave";
 
                 tablaDatos.Rows.Add(dataRow);
             }

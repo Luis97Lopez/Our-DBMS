@@ -81,7 +81,10 @@ namespace proyecto_BDA
         {
             if (BaseDeDatos != null && !string.IsNullOrEmpty(textbox_agregar_tabla.Text))
             {
-                try { BaseDeDatos.AgregaTabla(textbox_agregar_tabla.Text); }
+                try 
+                { 
+                    BaseDeDatos.AgregaTabla(textbox_agregar_tabla.Text);
+                }
                 catch (DuplicateNameException)
                 {
                     MessageBox.Show("Ya existe una tabla con ese nombre", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -226,10 +229,19 @@ namespace proyecto_BDA
             try
             {
                 string nomTabla = combobox_tablas_atributos.SelectedItem.ToString();
-                BaseDeDatos.AgregaAtributo(nomTabla, atributo);
 
                 if (combobox_indice.SelectedIndex == 1)
-                    BaseDeDatos.AgregaLlavePrimaria(nomTabla, atributo);
+                {
+                    if (BaseDeDatos.ContieneLlavePrimaria(nomTabla))
+                    {
+                        BaseDeDatos.AgregaAtributo(nomTabla, atributo);
+                        BaseDeDatos.AgregaLlavePrimaria(nomTabla, atributo);
+                    }
+                    else
+                        MessageBox.Show("Ya existe una clave primaria", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                else
+                    BaseDeDatos.AgregaAtributo(nomTabla, atributo);
             }
             catch (DuplicateNameException)
             {
