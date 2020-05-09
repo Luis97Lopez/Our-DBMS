@@ -84,6 +84,7 @@ namespace proyecto_BDA
                 try 
                 { 
                     BaseDeDatos.AgregaTabla(textbox_agregar_tabla.Text);
+                    textbox_agregar_tabla.Text = "";
                 }
                 catch (DuplicateNameException)
                 {

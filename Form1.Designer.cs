@@ -702,7 +702,7 @@
             // label_eliminar_tabla
             // 
             this.label_eliminar_tabla.AutoSize = true;
-            this.label_eliminar_tabla.Location = new System.Drawing.Point(64, 20);
+            this.label_eliminar_tabla.Location = new System.Drawing.Point(64, 17);
             this.label_eliminar_tabla.Name = "label_eliminar_tabla";
             this.label_eliminar_tabla.Size = new System.Drawing.Size(10, 13);
             this.label_eliminar_tabla.TabIndex = 17;
