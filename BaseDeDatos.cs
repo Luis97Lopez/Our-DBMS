@@ -170,7 +170,7 @@ namespace proyecto_BDA
         /**
          * Verifica que no exista una llave primaria.
          **/
-        public bool ContieneLlavePrimaria(string nomTabla) => Set.Tables[nomTabla].PrimaryKey.Length == 0;
+        public bool ContieneLlavePrimaria(string nomTabla) => Set.Tables[nomTabla].PrimaryKey.Length != 0;
 
         /**
          * Agrega una llave primaria a una tabla.

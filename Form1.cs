@@ -243,7 +243,7 @@ namespace proyecto_BDA
 
                 if (combobox_tipo_llave.SelectedIndex == 1)
                 {
-                    if (BaseDeDatos.ContieneLlavePrimaria(nomTabla))
+                    if (!BaseDeDatos.ContieneLlavePrimaria(nomTabla))
                     {
                         BaseDeDatos.AgregaAtributo(nomTabla, atributo);
                         BaseDeDatos.AgregaLlavePrimaria(nomTabla, atributo);
