@@ -71,11 +71,11 @@
             this.boton_modificar_atributo = new System.Windows.Forms.Button();
             this.label_atributo_actual = new System.Windows.Forms.Label();
             this.boton_eliminar_atributo = new System.Windows.Forms.Button();
-            this.combobox_indice = new System.Windows.Forms.ComboBox();
+            this.combobox_tipo_llave = new System.Windows.Forms.ComboBox();
             this.label11 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.textbox_longitud = new System.Windows.Forms.TextBox();
-            this.combobox_tipo = new System.Windows.Forms.ComboBox();
+            this.combobox_tipo_dato = new System.Windows.Forms.ComboBox();
             this.label9 = new System.Windows.Forms.Label();
             this.combobox_tablas_atributos = new System.Windows.Forms.ComboBox();
             this.label8 = new System.Windows.Forms.Label();
@@ -468,11 +468,11 @@
             this.tab_atributos.Controls.Add(this.boton_modificar_atributo);
             this.tab_atributos.Controls.Add(this.label_atributo_actual);
             this.tab_atributos.Controls.Add(this.boton_eliminar_atributo);
-            this.tab_atributos.Controls.Add(this.combobox_indice);
+            this.tab_atributos.Controls.Add(this.combobox_tipo_llave);
             this.tab_atributos.Controls.Add(this.label11);
             this.tab_atributos.Controls.Add(this.label10);
             this.tab_atributos.Controls.Add(this.textbox_longitud);
-            this.tab_atributos.Controls.Add(this.combobox_tipo);
+            this.tab_atributos.Controls.Add(this.combobox_tipo_dato);
             this.tab_atributos.Controls.Add(this.label9);
             this.tab_atributos.Controls.Add(this.combobox_tablas_atributos);
             this.tab_atributos.Controls.Add(this.label8);
@@ -518,18 +518,18 @@
             this.boton_eliminar_atributo.UseVisualStyleBackColor = true;
             this.boton_eliminar_atributo.Click += new System.EventHandler(this.boton_eliminar_atributo_Click);
             // 
-            // combobox_indice
+            // combobox_tipo_llave
             // 
-            this.combobox_indice.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.combobox_indice.FormattingEnabled = true;
-            this.combobox_indice.Items.AddRange(new object[] {
+            this.combobox_tipo_llave.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.combobox_tipo_llave.FormattingEnabled = true;
+            this.combobox_tipo_llave.Items.AddRange(new object[] {
             "Sin llave",
             "Llave primaria",
             "Llave foránea"});
-            this.combobox_indice.Location = new System.Drawing.Point(469, 20);
-            this.combobox_indice.Name = "combobox_indice";
-            this.combobox_indice.Size = new System.Drawing.Size(123, 21);
-            this.combobox_indice.TabIndex = 25;
+            this.combobox_tipo_llave.Location = new System.Drawing.Point(469, 20);
+            this.combobox_tipo_llave.Name = "combobox_tipo_llave";
+            this.combobox_tipo_llave.Size = new System.Drawing.Size(123, 21);
+            this.combobox_tipo_llave.TabIndex = 25;
             // 
             // label11
             // 
@@ -557,19 +557,19 @@
             this.textbox_longitud.Size = new System.Drawing.Size(123, 20);
             this.textbox_longitud.TabIndex = 22;
             // 
-            // combobox_tipo
+            // combobox_tipo_dato
             // 
-            this.combobox_tipo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.combobox_tipo.FormattingEnabled = true;
-            this.combobox_tipo.Items.AddRange(new object[] {
+            this.combobox_tipo_dato.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.combobox_tipo_dato.FormattingEnabled = true;
+            this.combobox_tipo_dato.Items.AddRange(new object[] {
             "Entero",
             "Flotante",
             "Cadena"});
-            this.combobox_tipo.Location = new System.Drawing.Point(252, 51);
-            this.combobox_tipo.Name = "combobox_tipo";
-            this.combobox_tipo.Size = new System.Drawing.Size(123, 21);
-            this.combobox_tipo.TabIndex = 21;
-            this.combobox_tipo.SelectedIndexChanged += new System.EventHandler(this.combobox_tipo_SelectedIndexChanged);
+            this.combobox_tipo_dato.Location = new System.Drawing.Point(252, 51);
+            this.combobox_tipo_dato.Name = "combobox_tipo_dato";
+            this.combobox_tipo_dato.Size = new System.Drawing.Size(123, 21);
+            this.combobox_tipo_dato.TabIndex = 21;
+            this.combobox_tipo_dato.SelectedIndexChanged += new System.EventHandler(this.combobox_tipo_SelectedIndexChanged);
             // 
             // label9
             // 
@@ -772,11 +772,11 @@
         private System.Windows.Forms.Button boton_modificar_atributo;
         private System.Windows.Forms.Label label_atributo_actual;
         private System.Windows.Forms.Button boton_eliminar_atributo;
-        private System.Windows.Forms.ComboBox combobox_indice;
+        private System.Windows.Forms.ComboBox combobox_tipo_llave;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.TextBox textbox_longitud;
-        private System.Windows.Forms.ComboBox combobox_tipo;
+        private System.Windows.Forms.ComboBox combobox_tipo_dato;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.ComboBox combobox_tablas_atributos;
         private System.Windows.Forms.Label label8;

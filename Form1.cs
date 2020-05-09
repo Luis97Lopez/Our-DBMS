@@ -65,8 +65,8 @@ namespace proyecto_BDA
             {
                 BaseDeDatos = new BaseDeDatos(open.SelectedPath);
                 Habilita(true);
-                combobox_indice.SelectedIndex = 0;
-                combobox_tipo.SelectedIndex = 0;
+                combobox_tipo_llave.SelectedIndex = 0;
+                combobox_tipo_dato.SelectedIndex = 0;
                 Invalidate();
             }
         }
@@ -173,7 +173,7 @@ namespace proyecto_BDA
 
         private void combobox_tipo_SelectedIndexChanged(object sender, EventArgs e)
         {
-            textbox_longitud.Enabled = combobox_tipo.SelectedIndex == 2;
+            textbox_longitud.Enabled = combobox_tipo_dato.SelectedIndex == 2;
             textbox_longitud.Text = !textbox_longitud.Enabled ? sizeof(int).ToString() : "";
         }
 
@@ -186,18 +186,18 @@ namespace proyecto_BDA
 
             switch (diccionario_atributos.Rows[e.RowIndex].Cells[1].Value)
             {
-                case "Entero": combobox_tipo.SelectedIndex = 0; break;
-                case "Flotante": combobox_tipo.SelectedIndex = 1; break;
-                case "Cadena": combobox_tipo.SelectedIndex = 2; break;
+                case "Entero": combobox_tipo_dato.SelectedIndex = 0; break;
+                case "Flotante": combobox_tipo_dato.SelectedIndex = 1; break;
+                case "Cadena": combobox_tipo_dato.SelectedIndex = 2; break;
             }
 
             textbox_longitud.Text = diccionario_atributos.Rows[e.RowIndex].Cells[2].Value.ToString();
 
             switch (diccionario_atributos.Rows[e.RowIndex].Cells[3].Value)
             {
-                case "Ninguna": combobox_indice.SelectedIndex = 0; break;
-                case "Primaria": combobox_indice.SelectedIndex = 1; break;
-                case "Foránea": combobox_indice.SelectedIndex = 2; break;
+                case "Ninguna": combobox_tipo_llave.SelectedIndex = 0; break;
+                case "Primaria": combobox_tipo_llave.SelectedIndex = 1; break;
+                case "Foránea": combobox_tipo_llave.SelectedIndex = 2; break;
             }
         }
         /**
@@ -213,14 +213,23 @@ namespace proyecto_BDA
             boton_eliminar_bd.Enabled = valor;
             combobox_tablas_atributos.Enabled = valor;
             textbox_agregar_atributo.Enabled = valor;
-            combobox_tipo.Enabled = valor;
+            combobox_tipo_dato.Enabled = valor;
             textbox_longitud.Enabled = valor;
-            combobox_indice.Enabled = valor;
+            combobox_tipo_llave.Enabled = valor;
             boton_agregar_atributo.Enabled = valor;
             boton_modificar_atributo.Enabled = valor;
             boton_eliminar_atributo.Enabled = valor;
             diccionario_atributos.ReadOnly = true;
         }
+
+        private void ResetFrontAtributos()
+        {
+            textbox_agregar_atributo.Text = "";
+            combobox_tipo_dato.SelectedIndex = 0;
+            combobox_tipo_llave.SelectedIndex = 0;
+            label_atributo_actual.Text = "-";
+        }
+
         private void boton_agregar_atributo_Click(object sender, EventArgs e)
         {
             if (!ModificaAtributos())
@@ -232,7 +241,7 @@ namespace proyecto_BDA
             {
                 string nomTabla = combobox_tablas_atributos.SelectedItem.ToString();
 
-                if (combobox_indice.SelectedIndex == 1)
+                if (combobox_tipo_llave.SelectedIndex == 1)
                 {
                     if (BaseDeDatos.ContieneLlavePrimaria(nomTabla))
                     {
@@ -253,6 +262,7 @@ namespace proyecto_BDA
             {
                 diccionario_atributos.DataSource = BaseDeDatos.ObtenAtributos(combobox_tablas_atributos.SelectedItem.ToString());
             }
+            ResetFrontAtributos();
         }
         private void boton_modificar_atributo_Click(object sender, EventArgs e)
         {
@@ -282,7 +292,7 @@ namespace proyecto_BDA
         private void boton_eliminar_atributo_Click(object sender, EventArgs e)
         {
             int numTupla = diccionario_atributos.CurrentCell.RowIndex;
-            bool res = combobox_tablas_atributos.SelectedIndex >= 0 && combobox_indice.SelectedIndex >= 0;
+            bool res = combobox_tablas_atributos.SelectedIndex >= 0 && combobox_tipo_llave.SelectedIndex >= 0;
             res &= numTupla >= 0;
 
             if (!res)
@@ -300,13 +310,13 @@ namespace proyecto_BDA
 
         private DataColumn CreaAtributo()
         {
-            string texto = combobox_tipo.SelectedItem.ToString();
+            string texto = combobox_tipo_dato.SelectedItem.ToString();
             DataColumn atributo = new DataColumn(textbox_agregar_atributo.Text)
             {
                 DataType = Type.GetType("System." + (texto.Equals("Cadena") ? "String" :
                                                      texto.Equals("Entero") ? "Int32" :
                                                      "Single")),
-                Unique = combobox_indice.SelectedIndex == 1,
+                Unique = combobox_tipo_llave.SelectedIndex == 1,
             };
 
             if (texto.Equals("Cadena"))
@@ -337,7 +347,7 @@ namespace proyecto_BDA
                 res = false;
             }
 
-            if (res && combobox_indice.SelectedIndex == -1)
+            if (res && combobox_tipo_llave.SelectedIndex == -1)
             {
                 MessageBox.Show("Por favor selecciona un tipo de llave", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 res = false;
