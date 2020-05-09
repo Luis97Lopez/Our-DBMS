@@ -169,6 +169,7 @@ namespace proyecto_BDA
         {
             diccionario_atributos.Columns.Clear();
             diccionario_atributos.DataSource = BaseDeDatos.ObtenAtributos(combobox_tablas_atributos.SelectedItem.ToString());
+            ResetFrontAtributos();
         }
 
         private void combobox_tipo_SelectedIndexChanged(object sender, EventArgs e)
@@ -177,12 +178,12 @@ namespace proyecto_BDA
             textbox_longitud.Text = !textbox_longitud.Enabled ? sizeof(int).ToString() : "";
         }
 
-        private void diccionario_atributos_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
+        private void diccionario_atributos_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex == -1 || e.ColumnIndex == -1)
+            if (e.RowIndex == -1 || e.ColumnIndex == -1 || e.ColumnIndex != 0)
                 return;
 
-            textbox_agregar_atributo.Text = diccionario_atributos.Rows[e.RowIndex].Cells[0].Value.ToString();
+            label_atributo_actual.Text = textbox_agregar_atributo.Text = diccionario_atributos.Rows[e.RowIndex].Cells[0].Value.ToString();
 
             switch (diccionario_atributos.Rows[e.RowIndex].Cells[1].Value)
             {
@@ -227,6 +228,7 @@ namespace proyecto_BDA
             textbox_agregar_atributo.Text = "";
             combobox_tipo_dato.SelectedIndex = 0;
             combobox_tipo_llave.SelectedIndex = 0;
+            textbox_longitud.Text = "4";
             label_atributo_actual.Text = "-";
         }
 

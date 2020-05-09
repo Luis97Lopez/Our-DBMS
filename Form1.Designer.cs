@@ -58,6 +58,7 @@
             this.textbox_modificar_bd = new System.Windows.Forms.TextBox();
             this.tabs = new System.Windows.Forms.TabControl();
             this.tab_entidades = new System.Windows.Forms.TabPage();
+            this.label_eliminar_tabla = new System.Windows.Forms.Label();
             this.list_tablas = new System.Windows.Forms.ListView();
             this.fileName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Path = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -90,7 +91,6 @@
             this.TipoInd = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.label1 = new System.Windows.Forms.Label();
             this.vistas = new System.Windows.Forms.TabControl();
-            this.label_eliminar_tabla = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher1)).BeginInit();
             this.menu.SuspendLayout();
             this.vista_datos.SuspendLayout();
@@ -381,6 +381,16 @@
             this.tab_entidades.TabIndex = 0;
             this.tab_entidades.Text = "Tablas";
             // 
+            // label_eliminar_tabla
+            // 
+            this.label_eliminar_tabla.AutoSize = true;
+            this.label_eliminar_tabla.Location = new System.Drawing.Point(64, 17);
+            this.label_eliminar_tabla.Name = "label_eliminar_tabla";
+            this.label_eliminar_tabla.Size = new System.Drawing.Size(10, 13);
+            this.label_eliminar_tabla.TabIndex = 17;
+            this.label_eliminar_tabla.Text = "-";
+            this.label_eliminar_tabla.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // list_tablas
             // 
             this.list_tablas.BackColor = System.Drawing.SystemColors.ButtonFace;
@@ -654,7 +664,7 @@
             this.diccionario_atributos.RowHeadersWidth = 5;
             this.diccionario_atributos.Size = new System.Drawing.Size(752, 270);
             this.diccionario_atributos.TabIndex = 11;
-            this.diccionario_atributos.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.diccionario_atributos_CellMouseDoubleClick);
+            this.diccionario_atributos.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.diccionario_atributos_CellClick);
             // 
             // dataGridViewTextBoxColumn2
             // 
@@ -697,16 +707,6 @@
             this.vistas.SelectedIndex = 0;
             this.vistas.Size = new System.Drawing.Size(794, 469);
             this.vistas.TabIndex = 13;
-            // 
-            // label_eliminar_tabla
-            // 
-            this.label_eliminar_tabla.AutoSize = true;
-            this.label_eliminar_tabla.Location = new System.Drawing.Point(64, 17);
-            this.label_eliminar_tabla.Name = "label_eliminar_tabla";
-            this.label_eliminar_tabla.Size = new System.Drawing.Size(10, 13);
-            this.label_eliminar_tabla.TabIndex = 17;
-            this.label_eliminar_tabla.Text = "-";
-            this.label_eliminar_tabla.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // Form1
             // 
