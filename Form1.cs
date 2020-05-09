@@ -120,7 +120,7 @@ namespace proyecto_BDA
             if (list_tablas.SelectedItems.Count > 0)
             {
                 string nombre = list_tablas.SelectedItems[0].Text;
-                label_eliminar_tabla.Text = textbox_agregar_atributo.Text = nombre;
+                label_eliminar_tabla.Text = textbox_agregar_tabla.Text = nombre;
             }
         }
 
@@ -170,6 +170,7 @@ namespace proyecto_BDA
             diccionario_atributos.Columns.Clear();
             diccionario_atributos.DataSource = BaseDeDatos.ObtenAtributos(combobox_tablas_atributos.SelectedItem.ToString());
         }
+
         private void combobox_tipo_SelectedIndexChanged(object sender, EventArgs e)
         {
             textbox_longitud.Enabled = combobox_tipo.SelectedIndex == 2;
