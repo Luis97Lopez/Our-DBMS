@@ -58,12 +58,10 @@
             this.textbox_modificar_bd = new System.Windows.Forms.TextBox();
             this.tabs = new System.Windows.Forms.TabControl();
             this.tab_entidades = new System.Windows.Forms.TabPage();
-            this.label_eliminar_tabla = new System.Windows.Forms.Label();
             this.list_tablas = new System.Windows.Forms.ListView();
             this.fileName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Path = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.boton_eliminar_tabla = new System.Windows.Forms.Button();
-            this.textbox_actualizar_tabla = new System.Windows.Forms.TextBox();
             this.boton_modificar_tabla = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.textbox_agregar_tabla = new System.Windows.Forms.TextBox();
@@ -92,6 +90,7 @@
             this.TipoInd = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.label1 = new System.Windows.Forms.Label();
             this.vistas = new System.Windows.Forms.TabControl();
+            this.label_eliminar_tabla = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher1)).BeginInit();
             this.menu.SuspendLayout();
             this.vista_datos.SuspendLayout();
@@ -142,7 +141,7 @@
             this.nuevoToolStripMenuItem1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.nuevoToolStripMenuItem1.Name = "nuevoToolStripMenuItem1";
             this.nuevoToolStripMenuItem1.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
-            this.nuevoToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.nuevoToolStripMenuItem1.Size = new System.Drawing.Size(156, 22);
             this.nuevoToolStripMenuItem1.Text = "&Nuevo";
             this.nuevoToolStripMenuItem1.Click += new System.EventHandler(this.nuevoToolStripMenuItem1_Click);
             // 
@@ -370,7 +369,6 @@
             this.tab_entidades.Controls.Add(this.label_eliminar_tabla);
             this.tab_entidades.Controls.Add(this.list_tablas);
             this.tab_entidades.Controls.Add(this.boton_eliminar_tabla);
-            this.tab_entidades.Controls.Add(this.textbox_actualizar_tabla);
             this.tab_entidades.Controls.Add(this.boton_modificar_tabla);
             this.tab_entidades.Controls.Add(this.label3);
             this.tab_entidades.Controls.Add(this.textbox_agregar_tabla);
@@ -383,16 +381,6 @@
             this.tab_entidades.TabIndex = 0;
             this.tab_entidades.Text = "Tablas";
             // 
-            // label_eliminar_tabla
-            // 
-            this.label_eliminar_tabla.AutoSize = true;
-            this.label_eliminar_tabla.Location = new System.Drawing.Point(548, 39);
-            this.label_eliminar_tabla.Name = "label_eliminar_tabla";
-            this.label_eliminar_tabla.Size = new System.Drawing.Size(10, 13);
-            this.label_eliminar_tabla.TabIndex = 17;
-            this.label_eliminar_tabla.Text = "-";
-            this.label_eliminar_tabla.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
             // list_tablas
             // 
             this.list_tablas.BackColor = System.Drawing.SystemColors.ButtonFace;
@@ -400,9 +388,9 @@
             this.fileName,
             this.Path});
             this.list_tablas.HideSelection = false;
-            this.list_tablas.Location = new System.Drawing.Point(18, 113);
+            this.list_tablas.Location = new System.Drawing.Point(18, 78);
             this.list_tablas.Name = "list_tablas";
-            this.list_tablas.Size = new System.Drawing.Size(711, 245);
+            this.list_tablas.Size = new System.Drawing.Size(711, 280);
             this.list_tablas.TabIndex = 7;
             this.list_tablas.UseCompatibleStateImageBehavior = false;
             this.list_tablas.View = System.Windows.Forms.View.Details;
@@ -420,26 +408,19 @@
             // 
             // boton_eliminar_tabla
             // 
-            this.boton_eliminar_tabla.Location = new System.Drawing.Point(551, 65);
+            this.boton_eliminar_tabla.Location = new System.Drawing.Point(581, 36);
             this.boton_eliminar_tabla.Name = "boton_eliminar_tabla";
-            this.boton_eliminar_tabla.Size = new System.Drawing.Size(174, 23);
+            this.boton_eliminar_tabla.Size = new System.Drawing.Size(148, 23);
             this.boton_eliminar_tabla.TabIndex = 16;
             this.boton_eliminar_tabla.Text = "Eliminar Tabla";
             this.boton_eliminar_tabla.UseVisualStyleBackColor = true;
             this.boton_eliminar_tabla.Click += new System.EventHandler(this.boton_eliminar_tabla_Click);
             // 
-            // textbox_actualizar_tabla
-            // 
-            this.textbox_actualizar_tabla.Location = new System.Drawing.Point(283, 36);
-            this.textbox_actualizar_tabla.Name = "textbox_actualizar_tabla";
-            this.textbox_actualizar_tabla.Size = new System.Drawing.Size(174, 20);
-            this.textbox_actualizar_tabla.TabIndex = 15;
-            // 
             // boton_modificar_tabla
             // 
-            this.boton_modificar_tabla.Location = new System.Drawing.Point(283, 65);
+            this.boton_modificar_tabla.Location = new System.Drawing.Point(409, 36);
             this.boton_modificar_tabla.Name = "boton_modificar_tabla";
-            this.boton_modificar_tabla.Size = new System.Drawing.Size(174, 23);
+            this.boton_modificar_tabla.Size = new System.Drawing.Size(148, 23);
             this.boton_modificar_tabla.TabIndex = 14;
             this.boton_modificar_tabla.Text = "Actualizar Tabla";
             this.boton_modificar_tabla.UseVisualStyleBackColor = true;
@@ -473,9 +454,9 @@
             // 
             // boton_agregar_tabla
             // 
-            this.boton_agregar_tabla.Location = new System.Drawing.Point(18, 65);
+            this.boton_agregar_tabla.Location = new System.Drawing.Point(239, 36);
             this.boton_agregar_tabla.Name = "boton_agregar_tabla";
-            this.boton_agregar_tabla.Size = new System.Drawing.Size(174, 23);
+            this.boton_agregar_tabla.Size = new System.Drawing.Size(148, 23);
             this.boton_agregar_tabla.TabIndex = 9;
             this.boton_agregar_tabla.Text = "Agregar Tabla";
             this.boton_agregar_tabla.UseVisualStyleBackColor = true;
@@ -718,6 +699,16 @@
             this.vistas.Size = new System.Drawing.Size(794, 469);
             this.vistas.TabIndex = 13;
             // 
+            // label_eliminar_tabla
+            // 
+            this.label_eliminar_tabla.AutoSize = true;
+            this.label_eliminar_tabla.Location = new System.Drawing.Point(64, 20);
+            this.label_eliminar_tabla.Name = "label_eliminar_tabla";
+            this.label_eliminar_tabla.Size = new System.Drawing.Size(10, 13);
+            this.label_eliminar_tabla.TabIndex = 17;
+            this.label_eliminar_tabla.Text = "-";
+            this.label_eliminar_tabla.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -769,12 +760,10 @@
         private System.Windows.Forms.TabPage vista_dd;
         private System.Windows.Forms.TabControl tabs;
         private System.Windows.Forms.TabPage tab_entidades;
-        private System.Windows.Forms.Label label_eliminar_tabla;
         private System.Windows.Forms.ListView list_tablas;
         private System.Windows.Forms.ColumnHeader fileName;
         private System.Windows.Forms.ColumnHeader Path;
         private System.Windows.Forms.Button boton_eliminar_tabla;
-        private System.Windows.Forms.TextBox textbox_actualizar_tabla;
         private System.Windows.Forms.Button boton_modificar_tabla;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox textbox_agregar_tabla;
@@ -815,6 +804,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;
         private System.Windows.Forms.DataGridViewTextBoxColumn Longitud;
         private System.Windows.Forms.DataGridViewTextBoxColumn TipoInd;
+        private System.Windows.Forms.Label label_eliminar_tabla;
     }
 }
 

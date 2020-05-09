@@ -95,10 +95,10 @@ namespace proyecto_BDA
 
         private void boton_modificar_tabla_Click(object sender, EventArgs e)
         {
-            if(textbox_actualizar_tabla.Text != "" && list_tablas.SelectedItems.Count > 0)
+            if(textbox_agregar_tabla.Text != "" && list_tablas.SelectedItems.Count > 0)
             {
                 string nombreAnterior = list_tablas.SelectedItems[0].Text;
-                string nombreNuevo = textbox_actualizar_tabla.Text;
+                string nombreNuevo = textbox_agregar_tabla.Text;
 
                 try { BaseDeDatos.ModificaNombreTabla(nombreAnterior, nombreNuevo); }
                 catch (DuplicateNameException)
@@ -107,7 +107,7 @@ namespace proyecto_BDA
                 }
                 finally 
                 {
-                    textbox_actualizar_tabla.Text = "";
+                    textbox_agregar_tabla.Text = "";
                     label_eliminar_tabla.Text = "-";
                     Invalidate();
                 }
@@ -119,7 +119,7 @@ namespace proyecto_BDA
             if (list_tablas.SelectedItems.Count > 0)
             {
                 string nombre = list_tablas.SelectedItems[0].Text;
-                label_eliminar_tabla.Text = textbox_actualizar_tabla.Text = nombre;
+                label_eliminar_tabla.Text = textbox_agregar_atributo.Text = nombre;
             }
         }
 
@@ -158,7 +158,7 @@ namespace proyecto_BDA
             {
                 string tabla = list_tablas.SelectedItems[0].Text;
                 BaseDeDatos.EliminaTabla(tabla);
-                textbox_actualizar_tabla.Text = "";
+                textbox_agregar_tabla.Text = "";
                 label_eliminar_tabla.Text = "-";
                 Invalidate();
             }
