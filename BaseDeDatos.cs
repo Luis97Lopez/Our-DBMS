@@ -40,7 +40,7 @@ namespace proyecto_BDA
             {
                 Directory.Move(nombreBaseDeDatos, value);
                 nombreBaseDeDatos = value;
-                LeeTablas();
+                //LeeTablas();
             }
         }
 
