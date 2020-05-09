@@ -641,6 +641,7 @@
             this.diccionario_atributos.AllowUserToDeleteRows = false;
             this.diccionario_atributos.AllowUserToResizeColumns = false;
             this.diccionario_atributos.AllowUserToResizeRows = false;
+            this.diccionario_atributos.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.diccionario_atributos.BackgroundColor = System.Drawing.SystemColors.ButtonFace;
             this.diccionario_atributos.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.diccionario_atributos.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -660,14 +661,12 @@
             this.dataGridViewTextBoxColumn2.HeaderText = "Nombre";
             this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
             this.dataGridViewTextBoxColumn2.ReadOnly = true;
-            this.dataGridViewTextBoxColumn2.Width = 105;
             // 
             // dataGridViewTextBoxColumn3
             // 
             this.dataGridViewTextBoxColumn3.HeaderText = "Tipo de Dato";
             this.dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
             this.dataGridViewTextBoxColumn3.ReadOnly = true;
-            this.dataGridViewTextBoxColumn3.Width = 105;
             // 
             // Longitud
             // 
