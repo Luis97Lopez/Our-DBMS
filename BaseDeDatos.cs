@@ -158,16 +158,22 @@ namespace proyecto_BDA
          * siempre y cuando a la tabla no se le haya agregado ningún
          * registro.
          **/
-        public void AgregaAtributo(string nomTabla, DataColumn columna)
+        public bool AgregaAtributo(string nomTabla, DataColumn columna)
         {
             var tablas = Set.Tables;
-
             tablas[nomTabla].Columns.Add(columna);
 
-            if(columna.Unique)
-                AgregaLlavePrimaria(nomTabla, columna);
+            if (columna.Unique)
+                if (tablas[nomTabla].PrimaryKey.Length == 0)
+                    AgregaLlavePrimaria(nomTabla, columna);
+                else
+                {
+                    EliminaAtributo(nomTabla, columna.ColumnName);
+                    throw new DuplicatePrimaryKeyException();
+                }
 
             GuardaArchivoDeDatos(tablas[nomTabla], NombreBaseDeDatos + "\\" + nomTabla + ".dat");
+            return true;
         }
 
         /**
@@ -179,10 +185,11 @@ namespace proyecto_BDA
         {
             var tablas = Set.Tables;
 
+            if (atributoNuevo.Unique && tablas[nomTabla].PrimaryKey[0].ColumnName != nomAtributo)
+                throw new DuplicatePrimaryKeyException();
+
             EliminaAtributo(nomTabla, nomAtributo);
             AgregaAtributo(nomTabla, atributoNuevo);
-
-            GuardaArchivoDeDatos(tablas[nomTabla], NombreBaseDeDatos + "\\" + nomTabla + ".dat");
         }
 
         /**

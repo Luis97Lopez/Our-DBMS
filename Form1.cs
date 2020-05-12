@@ -242,22 +242,15 @@ namespace proyecto_BDA
             try
             {
                 string nomTabla = combobox_tablas_atributos.SelectedItem.ToString();
-
-                if (combobox_tipo_llave.SelectedIndex == 1)
-                {
-                    if (!BaseDeDatos.ContieneLlavePrimaria(nomTabla))
-                    {
-                        BaseDeDatos.AgregaAtributo(nomTabla, atributo);
-                    }
-                    else
-                        MessageBox.Show("Ya existe una clave primaria", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-                else
-                    BaseDeDatos.AgregaAtributo(nomTabla, atributo);
+                BaseDeDatos.AgregaAtributo(nomTabla, atributo);
             }
             catch (DuplicateNameException)
             {
-                MessageBox.Show("Ya existe un atributo con ese nombre", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Ya existe un atributo con ese nombre.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            catch(DuplicatePrimaryKeyException)
+            {
+                MessageBox.Show("Ya existe una llave primaria.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
             {
@@ -284,6 +277,10 @@ namespace proyecto_BDA
             catch (DuplicateNameException)
             {
                 MessageBox.Show("Ya existe un atributo con ese nombre", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            catch (DuplicatePrimaryKeyException)
+            {
+                MessageBox.Show("Ya existe una llave primaria.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
             {
