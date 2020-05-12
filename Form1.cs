@@ -248,7 +248,6 @@ namespace proyecto_BDA
                     if (!BaseDeDatos.ContieneLlavePrimaria(nomTabla))
                     {
                         BaseDeDatos.AgregaAtributo(nomTabla, atributo);
-                        BaseDeDatos.AgregaLlavePrimaria(nomTabla, atributo);
                     }
                     else
                         MessageBox.Show("Ya existe una clave primaria", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -290,6 +289,7 @@ namespace proyecto_BDA
             {
                 diccionario_atributos.DataSource = BaseDeDatos.ObtenAtributos(combobox_tablas_atributos.SelectedItem.ToString());
             }
+            ResetFrontAtributos();
         }
         private void boton_eliminar_atributo_Click(object sender, EventArgs e)
         {
@@ -308,6 +308,7 @@ namespace proyecto_BDA
             
             BaseDeDatos.EliminaAtributo(nomTabla, nomAtributo);
             diccionario_atributos.DataSource = BaseDeDatos.ObtenAtributos(combobox_tablas_atributos.SelectedItem.ToString());
+            ResetFrontAtributos();
         }
 
         private DataColumn CreaAtributo()

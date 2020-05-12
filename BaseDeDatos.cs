@@ -124,6 +124,36 @@ namespace proyecto_BDA
         }
 
         /**
+         * Devuelve la restricción en la que se encuentra el atributo
+         **/
+        private Constraint GetConstraint(string nomTabla, string nomAtributo)
+        {
+            var table = Set.Tables[nomTabla];
+            foreach (Constraint item in table.Constraints)
+            {
+                if (item is UniqueConstraint)
+                {
+                    UniqueConstraint unique = (UniqueConstraint)item;
+                    foreach (var column in unique.Columns)
+                    {
+                        if (column.ColumnName == nomAtributo)
+                            return item;
+                    }
+                }
+                else if (item is ForeignKeyConstraint)
+                {
+                    ForeignKeyConstraint foreign = (ForeignKeyConstraint)item;
+                    foreach (var column in foreign.Columns)
+                    {
+                        if (column.ColumnName == nomAtributo)
+                            return item;
+                    }
+                }
+            }
+            return null;
+        }
+
+        /**
          * Agrega un atributo nuevo a una tabla de la base de datos,
          * siempre y cuando a la tabla no se le haya agregado ningún
          * registro.
@@ -131,7 +161,12 @@ namespace proyecto_BDA
         public void AgregaAtributo(string nomTabla, DataColumn columna)
         {
             var tablas = Set.Tables;
+
             tablas[nomTabla].Columns.Add(columna);
+
+            if(columna.Unique)
+                AgregaLlavePrimaria(nomTabla, columna);
+
             GuardaArchivoDeDatos(tablas[nomTabla], NombreBaseDeDatos + "\\" + nomTabla + ".dat");
         }
 
@@ -143,9 +178,10 @@ namespace proyecto_BDA
         public void ModificaAtributo(string nomTabla, string nomAtributo, DataColumn atributoNuevo)
         {
             var tablas = Set.Tables;
-            tablas[nomTabla].Columns.Add(atributoNuevo);
-            tablas[nomTabla].Columns.Remove(nomAtributo);
-            
+
+            EliminaAtributo(nomTabla, nomAtributo);
+            AgregaAtributo(nomTabla, atributoNuevo);
+
             GuardaArchivoDeDatos(tablas[nomTabla], NombreBaseDeDatos + "\\" + nomTabla + ".dat");
         }
 
@@ -155,14 +191,15 @@ namespace proyecto_BDA
         public void EliminaAtributo(string nomTabla, string nomAtributo)
         {
             var tablas = Set.Tables;
-
-            if (tablas[nomTabla].Constraints.Contains(nomAtributo))
-                tablas[nomTabla].Constraints.Remove(nomAtributo);
+            Constraint constraint = GetConstraint(nomTabla, nomAtributo);
 
             if (tablas[nomTabla].PrimaryKey.Length == 1
-                && tablas[nomTabla].PrimaryKey[0].ColumnName.Equals(nomAtributo))
+            && tablas[nomTabla].PrimaryKey[0].ColumnName.Equals(nomAtributo))
                 tablas[nomTabla].PrimaryKey = new DataColumn[] { };
-            
+
+            if (constraint != null)
+                tablas[nomTabla].Constraints.Remove(constraint);
+
             tablas[nomTabla].Columns.Remove(nomAtributo);
             GuardaArchivoDeDatos(tablas[nomTabla], NombreBaseDeDatos + "\\" + nomTabla + ".dat");
         }
@@ -241,7 +278,7 @@ namespace proyecto_BDA
                 DataRow dataRow = tablaDatos.NewRow();
                 dataRow["Nombre"] = atributo.ColumnName;
                 dataRow["Tipo de Dato"] = atributo.DataType;
-                dataRow["Longitud"] = atributo.MaxLength == - 1 ? "" : atributo.MaxLength.ToString();
+                dataRow["Longitud"] = atributo.MaxLength == - 1 ? "4" : atributo.MaxLength.ToString();
 
                 if (tabla.Constraints.Contains(atributo.ColumnName))
                 {
