@@ -187,18 +187,18 @@ namespace proyecto_BDA
 
             switch (diccionario_atributos.Rows[e.RowIndex].Cells[1].Value)
             {
-                case "Entero": combobox_tipo_dato.SelectedIndex = 0; break;
-                case "Flotante": combobox_tipo_dato.SelectedIndex = 1; break;
-                case "Cadena": combobox_tipo_dato.SelectedIndex = 2; break;
+                case "System.Int32": combobox_tipo_dato.SelectedIndex = 0; break;
+                case "System.Single": combobox_tipo_dato.SelectedIndex = 1; break;
+                case "System.String": combobox_tipo_dato.SelectedIndex = 2; break;
             }
 
             textbox_longitud.Text = diccionario_atributos.Rows[e.RowIndex].Cells[2].Value.ToString();
 
             switch (diccionario_atributos.Rows[e.RowIndex].Cells[3].Value)
             {
-                case "Ninguna": combobox_tipo_llave.SelectedIndex = 0; break;
+                case "Sin Llave": combobox_tipo_llave.SelectedIndex = 0; break;
                 case "Primaria": combobox_tipo_llave.SelectedIndex = 1; break;
-                case "Foránea": combobox_tipo_llave.SelectedIndex = 2; break;
+                case "Foranea": combobox_tipo_llave.SelectedIndex = 2; break;
             }
         }
         /**
