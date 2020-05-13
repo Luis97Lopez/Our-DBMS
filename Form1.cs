@@ -355,5 +355,27 @@ namespace proyecto_BDA
 
             return res;
         }
+
+        private void combobox_tipo_llave_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if(combobox_tipo_llave.SelectedIndex == 2)
+            {
+                if(combobox_tablas_atributos.SelectedIndex > 0)
+                {
+                    combobox_foranea.Enabled = true;
+                    combobox_foranea.Items.Clear();
+                    foreach (var item in BaseDeDatos.Set.Tables)
+                    {
+                        if (item.ToString() != combobox_tablas_atributos.SelectedItem.ToString())
+                            combobox_foranea.Items.Add(item.ToString());
+                    }
+                }
+            }
+            else
+            {
+                combobox_foranea.Enabled = false;
+            }
+        }
+
     }
 }

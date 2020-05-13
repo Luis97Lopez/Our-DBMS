@@ -48,7 +48,7 @@
             this.boton_modificar_registro = new System.Windows.Forms.Button();
             this.boton_eliminar_registro = new System.Windows.Forms.Button();
             this.boton_agregar_registro = new System.Windows.Forms.Button();
-            this.combobox_entidades2 = new System.Windows.Forms.ComboBox();
+            this.combobox_datos = new System.Windows.Forms.ComboBox();
             this.label16 = new System.Windows.Forms.Label();
             this.grid_insertar_datos = new System.Windows.Forms.DataGridView();
             this.vista_dd = new System.Windows.Forms.TabPage();
@@ -69,6 +69,7 @@
             this.label6 = new System.Windows.Forms.Label();
             this.boton_agregar_tabla = new System.Windows.Forms.Button();
             this.tab_atributos = new System.Windows.Forms.TabPage();
+            this.combobox_foranea = new System.Windows.Forms.ComboBox();
             this.boton_modificar_atributo = new System.Windows.Forms.Button();
             this.label_atributo_actual = new System.Windows.Forms.Label();
             this.boton_eliminar_atributo = new System.Windows.Forms.Button();
@@ -207,7 +208,7 @@
             this.vista_datos.Controls.Add(this.boton_modificar_registro);
             this.vista_datos.Controls.Add(this.boton_eliminar_registro);
             this.vista_datos.Controls.Add(this.boton_agregar_registro);
-            this.vista_datos.Controls.Add(this.combobox_entidades2);
+            this.vista_datos.Controls.Add(this.combobox_datos);
             this.vista_datos.Controls.Add(this.label16);
             this.vista_datos.Controls.Add(this.grid_insertar_datos);
             this.vista_datos.Location = new System.Drawing.Point(4, 22);
@@ -270,14 +271,14 @@
             this.boton_agregar_registro.Text = "Agregar Registro";
             this.boton_agregar_registro.UseVisualStyleBackColor = true;
             // 
-            // combobox_entidades2
+            // combobox_datos
             // 
-            this.combobox_entidades2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.combobox_entidades2.FormattingEnabled = true;
-            this.combobox_entidades2.Location = new System.Drawing.Point(25, 32);
-            this.combobox_entidades2.Name = "combobox_entidades2";
-            this.combobox_entidades2.Size = new System.Drawing.Size(121, 21);
-            this.combobox_entidades2.TabIndex = 20;
+            this.combobox_datos.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.combobox_datos.FormattingEnabled = true;
+            this.combobox_datos.Location = new System.Drawing.Point(25, 32);
+            this.combobox_datos.Name = "combobox_datos";
+            this.combobox_datos.Size = new System.Drawing.Size(121, 21);
+            this.combobox_datos.TabIndex = 20;
             // 
             // label16
             // 
@@ -475,6 +476,7 @@
             // tab_atributos
             // 
             this.tab_atributos.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.tab_atributos.Controls.Add(this.combobox_foranea);
             this.tab_atributos.Controls.Add(this.boton_modificar_atributo);
             this.tab_atributos.Controls.Add(this.label_atributo_actual);
             this.tab_atributos.Controls.Add(this.boton_eliminar_atributo);
@@ -498,6 +500,16 @@
             this.tab_atributos.TabIndex = 1;
             this.tab_atributos.Text = "Atributos";
             // 
+            // combobox_foranea
+            // 
+            this.combobox_foranea.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.combobox_foranea.Enabled = false;
+            this.combobox_foranea.FormattingEnabled = true;
+            this.combobox_foranea.Location = new System.Drawing.Point(627, 20);
+            this.combobox_foranea.Name = "combobox_foranea";
+            this.combobox_foranea.Size = new System.Drawing.Size(121, 21);
+            this.combobox_foranea.TabIndex = 29;
+            // 
             // boton_modificar_atributo
             // 
             this.boton_modificar_atributo.Location = new System.Drawing.Point(469, 76);
@@ -511,7 +523,7 @@
             // label_atributo_actual
             // 
             this.label_atributo_actual.AutoSize = true;
-            this.label_atributo_actual.Location = new System.Drawing.Point(634, 30);
+            this.label_atributo_actual.Location = new System.Drawing.Point(634, 52);
             this.label_atributo_actual.Name = "label_atributo_actual";
             this.label_atributo_actual.Size = new System.Drawing.Size(10, 13);
             this.label_atributo_actual.TabIndex = 27;
@@ -520,7 +532,7 @@
             // 
             // boton_eliminar_atributo
             // 
-            this.boton_eliminar_atributo.Location = new System.Drawing.Point(637, 54);
+            this.boton_eliminar_atributo.Location = new System.Drawing.Point(627, 76);
             this.boton_eliminar_atributo.Name = "boton_eliminar_atributo";
             this.boton_eliminar_atributo.Size = new System.Drawing.Size(123, 23);
             this.boton_eliminar_atributo.TabIndex = 26;
@@ -540,6 +552,7 @@
             this.combobox_tipo_llave.Name = "combobox_tipo_llave";
             this.combobox_tipo_llave.Size = new System.Drawing.Size(123, 21);
             this.combobox_tipo_llave.TabIndex = 25;
+            this.combobox_tipo_llave.SelectedIndexChanged += new System.EventHandler(this.combobox_tipo_llave_SelectedIndexChanged);
             // 
             // label11
             // 
@@ -792,7 +805,7 @@
         private System.Windows.Forms.Button boton_modificar_registro;
         private System.Windows.Forms.Button boton_eliminar_registro;
         private System.Windows.Forms.Button boton_agregar_registro;
-        private System.Windows.Forms.ComboBox combobox_entidades2;
+        private System.Windows.Forms.ComboBox combobox_datos;
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.DataGridView grid_insertar_datos;
         private System.Windows.Forms.Label label_bd;
@@ -804,6 +817,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Longitud;
         private System.Windows.Forms.DataGridViewTextBoxColumn TipoInd;
         private System.Windows.Forms.Label label_eliminar_tabla;
+        private System.Windows.Forms.ComboBox combobox_foranea;
     }
 }
 
