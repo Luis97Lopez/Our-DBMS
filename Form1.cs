@@ -17,7 +17,7 @@ namespace proyecto_BDA
         public Form1()
         {
             InitializeComponent();
-            Habilita(false);
+            ModificaPantallas(false);
         }
 
         private void nuevoToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -26,7 +26,8 @@ namespace proyecto_BDA
             if (open.ShowDialog() == DialogResult.OK)
             {
                 BaseDeDatos = new BaseDeDatos(open.FileName);
-                Habilita(true);
+                ModificaPantallas(true);
+
             }
             Invalidate();
         }
@@ -39,7 +40,6 @@ namespace proyecto_BDA
                 label_bd.Text = s.Substring(s.LastIndexOf("\\") + 1);
 
                 list_tablas.Items.Clear();
-                combobox_tablas_atributos.Items.Clear();
 
                 foreach (var item in BaseDeDatos.Set.Tables)
                 {
@@ -48,7 +48,6 @@ namespace proyecto_BDA
                     ListViewItem list = new ListViewItem(subitems);
                     list_tablas.Items.Add(list);
 
-                    combobox_tablas_atributos.Items.Add(item.ToString());
                 }
             }
             else
@@ -64,7 +63,7 @@ namespace proyecto_BDA
             if (open.ShowDialog() == DialogResult.OK)
             {
                 BaseDeDatos = new BaseDeDatos(open.SelectedPath);
-                Habilita(true);
+                ModificaPantallas(true);
                 combobox_tipo_llave.SelectedIndex = 0;
                 combobox_tipo_dato.SelectedIndex = 0;
                 Invalidate();
@@ -205,7 +204,7 @@ namespace proyecto_BDA
          * Habilita/deshabilita los botones/controles del programa. 
          * Este método es preventivo ;v
          */
-        private void Habilita(bool valor)
+        private void ModificaPantallas(bool valor)
         {
             boton_agregar_tabla.Enabled = valor;
             boton_modificar_tabla.Enabled = valor;
@@ -360,22 +359,37 @@ namespace proyecto_BDA
         {
             if(combobox_tipo_llave.SelectedIndex == 2)
             {
-                if(combobox_tablas_atributos.SelectedIndex > 0)
+
+                combobox_foranea.Enabled = true;
+                combobox_foranea.Items.Clear();
+                foreach (var item in BaseDeDatos.Set.Tables)
                 {
-                    combobox_foranea.Enabled = true;
-                    combobox_foranea.Items.Clear();
-                    foreach (var item in BaseDeDatos.Set.Tables)
-                    {
-                        if (item.ToString() != combobox_tablas_atributos.SelectedItem.ToString())
-                            combobox_foranea.Items.Add(item.ToString());
-                    }
+                    if (item.ToString() != combobox_tablas_atributos.SelectedItem.ToString())
+                        combobox_foranea.Items.Add(item.ToString());
                 }
             }
             else
             {
+                combobox_foranea.Items.Clear();
                 combobox_foranea.Enabled = false;
             }
         }
 
+        private void tabs_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if(tabs.SelectedIndex == 1)
+            {
+                combobox_tablas_atributos.Items.Clear();
+                if (BaseDeDatos != null)
+                {
+                    foreach (var item in BaseDeDatos.Set.Tables)
+                    {
+                        combobox_tablas_atributos.Items.Add(item.ToString());
+                    }
+                }
+                ResetFrontAtributos();
+                diccionario_atributos.Columns.Clear();
+            }
+        }
     }
 }
