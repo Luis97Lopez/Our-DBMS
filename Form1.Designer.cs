@@ -524,7 +524,7 @@
             // label_atributo_actual
             // 
             this.label_atributo_actual.AutoSize = true;
-            this.label_atributo_actual.Location = new System.Drawing.Point(634, 52);
+            this.label_atributo_actual.Location = new System.Drawing.Point(624, 54);
             this.label_atributo_actual.Name = "label_atributo_actual";
             this.label_atributo_actual.Size = new System.Drawing.Size(10, 13);
             this.label_atributo_actual.TabIndex = 27;
