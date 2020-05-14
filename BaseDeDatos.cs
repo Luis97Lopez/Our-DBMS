@@ -140,15 +140,17 @@ namespace proyecto_BDA
                             return item;
                     }
                 }
+                
                 else if (item is ForeignKeyConstraint)
                 {
                     ForeignKeyConstraint foreign = (ForeignKeyConstraint)item;
                     foreach (var column in foreign.Columns)
                     {
                         if (column.ColumnName == nomAtributo)
-                            return item;
+                            return null;
                     }
                 }
+                
             }
             return null;
         }
@@ -200,14 +202,16 @@ namespace proyecto_BDA
             var tablas = Set.Tables;
             Constraint constraint = GetConstraint(nomTabla, nomAtributo);
 
-            if (tablas[nomTabla].PrimaryKey.Length == 1
-            && tablas[nomTabla].PrimaryKey[0].ColumnName.Equals(nomAtributo))
+            if (tablas[nomTabla].PrimaryKey.Length == 1 && tablas[nomTabla].PrimaryKey[0].ColumnName.Equals(nomAtributo))
+            {
                 tablas[nomTabla].PrimaryKey = new DataColumn[] { };
-
-            if (constraint != null)
                 tablas[nomTabla].Constraints.Remove(constraint);
+            }
 
-            tablas[nomTabla].Columns.Remove(nomAtributo);
+            //if (constraint != null)
+                tablas[nomTabla].Columns.Remove(nomAtributo);
+            //else
+              //  throw new Exception();
             GuardaArchivoDeDatos(tablas[nomTabla], NombreBaseDeDatos + "\\" + nomTabla + ".dat");
         }
 
@@ -232,16 +236,25 @@ namespace proyecto_BDA
         public void AgregaLlaveForanea(string nomTabla, DataColumn llavePrimaria, DataColumn llaveForanea)
         {
             var tablas = Set.Tables;
-            string nombreLlave = llavePrimaria.ColumnName;
+            string nombreLlave = llaveForanea.ColumnName;
 
             // Relaciona la llave primaria de un atributo de una tabla
             // con la llave foránea de esta tabla.
-            tablas[nomTabla].Constraints.Add(nombreLlave, llavePrimaria, llaveForanea);
-            var restriccion = tablas[nomTabla].Constraints[nombreLlave] as ForeignKeyConstraint;
+
+            //tablas[nomTabla].Constraints.Add(nombreLlave, llavePrimaria, llaveForanea);
+
+            var restriccion = new ForeignKeyConstraint(nombreLlave, llavePrimaria, llaveForanea);
+
+            //var restriccion = tablas[nomTabla].Constraints[nombreLlave] as ForeignKeyConstraint;
 
             // Establece las reglas de modificación y eliminación.
             restriccion.UpdateRule = Rule.Cascade;
             restriccion.DeleteRule = Rule.Cascade;
+
+            tablas[nomTabla].Constraints.Add(restriccion);
+
+            GuardaArchivoDeDatos(tablas[nomTabla], NombreBaseDeDatos + "\\" + nomTabla + ".dat");
+            GuardaArchivoDeDatos(llavePrimaria.Table, NombreBaseDeDatos + "\\" + llavePrimaria.Table.TableName + ".dat");
         }
 
         /**
@@ -290,7 +303,7 @@ namespace proyecto_BDA
                 if (tabla.Constraints.Contains(atributo.ColumnName))
                 {
                     string nomLlave = atributo.ColumnName;
-                    dataRow["Tipo de Llave"] = "Foránea";
+                    dataRow["Tipo de Llave"] = "Foranea";
                 } 
                 else if (tabla.PrimaryKey.Length == 1
                         && tabla.PrimaryKey[0].ColumnName.Equals(atributo.ColumnName))

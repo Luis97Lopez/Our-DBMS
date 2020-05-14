@@ -92,6 +92,7 @@
             this.TipoInd = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.label1 = new System.Windows.Forms.Label();
             this.vistas = new System.Windows.Forms.TabControl();
+            this.button1 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher1)).BeginInit();
             this.menu.SuspendLayout();
             this.vista_datos.SuspendLayout();
@@ -477,6 +478,7 @@
             // tab_atributos
             // 
             this.tab_atributos.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.tab_atributos.Controls.Add(this.button1);
             this.tab_atributos.Controls.Add(this.combobox_foranea);
             this.tab_atributos.Controls.Add(this.boton_modificar_atributo);
             this.tab_atributos.Controls.Add(this.label_atributo_actual);
@@ -722,6 +724,16 @@
             this.vistas.Size = new System.Drawing.Size(794, 469);
             this.vistas.TabIndex = 13;
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(388, 76);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 30;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -819,6 +831,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn TipoInd;
         private System.Windows.Forms.Label label_eliminar_tabla;
         private System.Windows.Forms.ComboBox combobox_foranea;
+        private System.Windows.Forms.Button button1;
     }
 }
 

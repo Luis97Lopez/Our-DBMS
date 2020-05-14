@@ -242,6 +242,8 @@ namespace proyecto_BDA
             {
                 string nomTabla = combobox_tablas_atributos.SelectedItem.ToString();
                 BaseDeDatos.AgregaAtributo(nomTabla, atributo);
+
+                CreaRelacion(atributo);
             }
             catch (DuplicateNameException)
             {
@@ -324,6 +326,17 @@ namespace proyecto_BDA
             return atributo;
         }
 
+        private void CreaRelacion(DataColumn child)
+        {
+            if (combobox_tipo_llave.SelectedIndex != 2)
+                return;
+
+            string table = combobox_foranea.SelectedItem.ToString();
+            var father = BaseDeDatos.Set.Tables[table];
+
+            BaseDeDatos.AgregaLlaveForanea(child.Table.TableName, father.PrimaryKey[0], child);
+        }
+
         private bool ModificaAtributos()
         {
             bool res = true;
@@ -389,6 +402,18 @@ namespace proyecto_BDA
                 }
                 ResetFrontAtributos();
                 diccionario_atributos.Columns.Clear();
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            foreach (DataTable item in BaseDeDatos.Set.Tables)
+            {
+                Console.WriteLine("Tabla: " + item.TableName);
+                foreach (Constraint c in item.Constraints)
+                {
+                    Console.WriteLine("Restriccion: " + c.ConstraintName);
+                }
             }
         }
     }
