@@ -17,7 +17,7 @@ namespace proyecto_BDA
         public Form1()
         {
             InitializeComponent();
-            ModificaPantallas(false);
+            ModificaPantallas(false);          
         }
 
         private void nuevoToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -27,7 +27,6 @@ namespace proyecto_BDA
             {
                 BaseDeDatos = new BaseDeDatos(open.FileName);
                 ModificaPantallas(true);
-
             }
             Invalidate();
         }
@@ -334,7 +333,7 @@ namespace proyecto_BDA
             string table = combobox_foranea.SelectedItem.ToString();
             var father = BaseDeDatos.Set.Tables[table];
 
-            BaseDeDatos.AgregaLlaveForanea(child.Table.TableName, father.PrimaryKey[0], child);
+            BaseDeDatos.AgregaLlaveForanea(father.PrimaryKey[0], child);
         }
 
         private bool ModificaAtributos()

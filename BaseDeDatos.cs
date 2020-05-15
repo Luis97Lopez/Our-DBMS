@@ -53,14 +53,18 @@ namespace proyecto_BDA
          * nueva, de lo contrario, lee la base de datos
          * existente.
          **/
+
         public BaseDeDatos(string nombre)
         {
             nombreBaseDeDatos = nombre;
             Set = new DataSet(nombre);
 
             if (Directory.Exists(NombreBaseDeDatos))
+            {
                 // Ya existe una base de datos con ese nombre.
                 LeeTablas();
+                LeeRelaciones();
+            }
             else
                 // No existe, por lo tanto, se crea una nueva.
                 Directory.CreateDirectory(NombreBaseDeDatos);
@@ -77,7 +81,6 @@ namespace proyecto_BDA
 
             foreach (var archivoDeDatos in archivosDeDatos)
             {
-
                 // Carga los archivos de datos correspondientes a cada
                 // tabla.
                 using (var archivoDAT = new FileStream(archivoDeDatos, FileMode.Open))
@@ -86,6 +89,22 @@ namespace proyecto_BDA
                     Set.Tables.Add((DataTable)deserializador.Deserialize(archivoDAT));
                 }
             }
+        }
+
+        /**
+         * Lee el conjunto de relaciones que pueden existir en cada
+         * una de las tablas. 
+         **/
+        private void LeeRelaciones()
+        {
+            // Obtiene un listado del nombre de los archivos índices
+            // que representan una relación en la base de datos.
+            var archivosIDX = Directory.EnumerateFiles(NombreBaseDeDatos, "*.idx", SearchOption.AllDirectories);
+            
+
+            foreach (var archivoIDX in archivosIDX)
+                // Carga las relaciones a la base de datos.
+                Set.Relations.Add(LeeArchivoRelacion(archivoIDX));
         }
 
         /**
@@ -202,16 +221,29 @@ namespace proyecto_BDA
             var tablas = Set.Tables;
             Constraint constraint = GetConstraint(nomTabla, nomAtributo);
 
+            // Verifica que el atributo no pertenezca a la clave primaria,
+            // de ser así se vacía el campo PrimaryKey. Al hacer esto, au-
+            // tomáticamente se eliminan las restricciones (Constraints) a
+            // las que pertenezca la clave primaria.
             if (tablas[nomTabla].PrimaryKey.Length == 1 && tablas[nomTabla].PrimaryKey[0].ColumnName.Equals(nomAtributo))
             {
+                //tablas[nomTabla].PrimaryKey = null;
                 tablas[nomTabla].PrimaryKey = new DataColumn[] { };
-                tablas[nomTabla].Constraints.Remove(constraint);
+                //tablas[nomTabla].Constraints.Remove(constraint); // El reinicializar el arreglo ya hace esto.
             }
 
-            //if (constraint != null)
-                tablas[nomTabla].Columns.Remove(nomAtributo);
-            //else
-              //  throw new Exception();
+            // Si este atributo contiene alguna relación con otra tabla, 
+            // se elimina.
+            if (Set.Relations.Contains(nomAtributo))
+            {
+                Set.Relations.Remove(nomAtributo);
+                tablas[nomTabla].Constraints.Remove(nomAtributo);
+                File.Delete(NombreBaseDeDatos + "\\" + nomAtributo + ".idx");
+            }
+
+            // Se elimina el atributo y se guarda el nuevo estado de la
+            // tabla en el archivo de datos.
+            tablas[nomTabla].Columns.Remove(nomAtributo);
             GuardaArchivoDeDatos(tablas[nomTabla], NombreBaseDeDatos + "\\" + nomTabla + ".dat");
         }
 
@@ -233,37 +265,85 @@ namespace proyecto_BDA
         /**
          * Agrega una llave foránea, asociando una tabla con otra.
          **/
-        public void AgregaLlaveForanea(string nomTabla, DataColumn llavePrimaria, DataColumn llaveForanea)
+        public void AgregaLlaveForanea(DataColumn llavePrimaria, DataColumn llaveForanea)
+        {
+            string nomLlave = llaveForanea.ColumnName;
+
+            DataRelation relacion = new DataRelation(nomLlave, llavePrimaria, llaveForanea);
+            Set.Relations.Add(relacion);
+
+            // Crea un diccionario con la información que va a almacenarse.
+            var informacion = new Dictionary<string, string>()
+            {
+                // El nombre de la relación de la clave foránea con otra
+                // tabla.
+                ["nombre relacion"] = nomLlave,
+
+                // El nombre de la tabla a la que pertenece la clave 
+                // primaria.
+                ["tabla primaria"] = llavePrimaria.Table.TableName,
+
+                // El nombre de la tabla a la que pertenece la clave 
+                // foránea.
+                ["tabla foranea"] = llaveForanea.Table.TableName,
+
+                // El nombre de la columna que representa la clave
+                // primaria.
+                ["clave primaria"] = llavePrimaria.ColumnName,
+
+                // El nombre de la columna que representa la clave
+                // foránea.
+                ["clave foranea"] = llaveForanea.ColumnName
+            };
+
+            // Guarda los metadatos del diccionario en un archivo
+            // índice.
+            string nomArchivo = NombreBaseDeDatos + "\\" + nomLlave + ".idx";
+
+            using (var archivoIDX = new FileStream(nomArchivo, FileMode.OpenOrCreate))
+            {
+                var serializador = new BinaryFormatter();
+                serializador.Serialize(archivoIDX, informacion);
+            }
+        }
+
+        /**
+        * Lee una llave foránea, de un archivo IDX.
+        **/
+        public DataRelation LeeArchivoRelacion(string nomArchivo)
         {
             var tablas = Set.Tables;
-            string nombreLlave = llaveForanea.ColumnName;
+          
+            // Crea un diccionario que obtendrá la información de
+            // la relación.
+            var infoRelacion = new Dictionary<string, string>();
 
-            // Relaciona la llave primaria de un atributo de una tabla
-            // con la llave foránea de esta tabla.
+            // Lee el archivo .idx correspondiente a la relación.
+            using (var archivoIDX = new FileStream(nomArchivo, FileMode.Open))
+            {
+                var deserializador = new BinaryFormatter();
+                infoRelacion = (Dictionary<string, string>)deserializador.Deserialize(archivoIDX);
+            }
 
-            //tablas[nomTabla].Constraints.Add(nombreLlave, llavePrimaria, llaveForanea);
+            // Obtiene la columna que representa a la llave primaria, 
+            // usando los metadatos del diccionario.
+            DataColumn llavePrimaria = tablas[infoRelacion["tabla primaria"]].Columns[infoRelacion["clave primaria"]];
 
-            var restriccion = new ForeignKeyConstraint(nombreLlave, llavePrimaria, llaveForanea);
-
-            //var restriccion = tablas[nomTabla].Constraints[nombreLlave] as ForeignKeyConstraint;
-
-            // Establece las reglas de modificación y eliminación.
-            restriccion.UpdateRule = Rule.Cascade;
-            restriccion.DeleteRule = Rule.Cascade;
-
-            tablas[nomTabla].Constraints.Add(restriccion);
-
-            GuardaArchivoDeDatos(tablas[nomTabla], NombreBaseDeDatos + "\\" + nomTabla + ".dat");
-            GuardaArchivoDeDatos(llavePrimaria.Table, NombreBaseDeDatos + "\\" + llavePrimaria.Table.TableName + ".dat");
+            // Obtiene la columna que representa a la llave foránea, 
+            // usando los metadatos del diccionario.
+            DataColumn llaveForanea = tablas[infoRelacion["tabla foranea"]].Columns[infoRelacion["clave foranea"]];
+            
+            return new DataRelation(infoRelacion["nombre relacion"], llavePrimaria, llaveForanea);
         }
 
         /**
          * Agrega un registro a una tabla.
          **/
-        public void AgregaRegistro(string nomTabla, DataRow registro)
+        public void AgregaRegistro(string nomTabla, object[] registro)
         {
             var tablas = Set.Tables;
             tablas[nomTabla].Rows.Add(registro);
+            GuardaArchivoDeDatos(tablas[nomTabla], NombreBaseDeDatos + "\\" + nomTabla + ".dat");
         }
 
         /**
