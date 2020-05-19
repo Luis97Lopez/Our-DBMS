@@ -63,7 +63,8 @@ namespace proyecto_BDA
             {
                 // Ya existe una base de datos con ese nombre.
                 LeeTablas();
-                LeeRelaciones();
+                if(Set.Tables.Count > 0 )
+                    LeeRelaciones();
             }
             else
                 // No existe, por lo tanto, se crea una nueva.
@@ -100,11 +101,18 @@ namespace proyecto_BDA
             // Obtiene un listado del nombre de los archivos índices
             // que representan una relación en la base de datos.
             var archivosIDX = Directory.EnumerateFiles(NombreBaseDeDatos, "*.idx", SearchOption.AllDirectories);
-            
+
 
             foreach (var archivoIDX in archivosIDX)
                 // Carga las relaciones a la base de datos.
-                Set.Relations.Add(LeeArchivoRelacion(archivoIDX));
+                try
+                {
+                    Set.Relations.Add(LeeArchivoRelacion(archivoIDX));
+                }
+                catch
+                {
+                    Console.WriteLine("Excepción Generada: Error en lectura de Relación");
+                }
         }
 
         /**
@@ -145,31 +153,12 @@ namespace proyecto_BDA
         /**
          * Devuelve la restricción en la que se encuentra el atributo
          **/
-        private Constraint GetConstraint(string nomTabla, string nomAtributo)
+        private DataRelation GetRelation(string nomAtributo)
         {
-            var table = Set.Tables[nomTabla];
-            foreach (Constraint item in table.Constraints)
+            foreach (DataRelation item in Set.Relations)
             {
-                if (item is UniqueConstraint)
-                {
-                    UniqueConstraint unique = (UniqueConstraint)item;
-                    foreach (var column in unique.Columns)
-                    {
-                        if (column.ColumnName == nomAtributo)
-                            return item;
-                    }
-                }
-                
-                else if (item is ForeignKeyConstraint)
-                {
-                    ForeignKeyConstraint foreign = (ForeignKeyConstraint)item;
-                    foreach (var column in foreign.Columns)
-                    {
-                        if (column.ColumnName == nomAtributo)
-                            return null;
-                    }
-                }
-                
+                if (item.ParentColumns[0].ColumnName == nomAtributo)
+                    return item;
             }
             return null;
         }
@@ -182,16 +171,22 @@ namespace proyecto_BDA
         public bool AgregaAtributo(string nomTabla, DataColumn columna)
         {
             var tablas = Set.Tables;
-            tablas[nomTabla].Columns.Add(columna);
+            bool pk = false;
 
             if (columna.Unique)
                 if (tablas[nomTabla].PrimaryKey.Length == 0)
-                    AgregaLlavePrimaria(nomTabla, columna);
+                {
+                    pk = true;
+                }
                 else
                 {
-                    EliminaAtributo(nomTabla, columna.ColumnName);
                     throw new DuplicatePrimaryKeyException();
                 }
+
+            tablas[nomTabla].Columns.Add(columna);
+
+            if(pk)
+                AgregaLlavePrimaria(nomTabla, columna);
 
             GuardaArchivoDeDatos(tablas[nomTabla], NombreBaseDeDatos + "\\" + nomTabla + ".dat");
             return true;
@@ -206,10 +201,30 @@ namespace proyecto_BDA
         {
             var tablas = Set.Tables;
 
-            if (atributoNuevo.Unique && tablas[nomTabla].PrimaryKey[0].ColumnName != nomAtributo)
+            if (atributoNuevo.Unique && tablas[nomTabla].PrimaryKey.Length > 0 &&
+                tablas[nomTabla].PrimaryKey[0].ColumnName != nomAtributo)
                 throw new DuplicatePrimaryKeyException();
 
-            EliminaAtributo(nomTabla, nomAtributo);
+            try
+            {
+                EliminaAtributo(nomTabla, nomAtributo);
+            }
+            catch (ArgumentException error)
+            {
+                if (!atributoNuevo.Unique)
+                    throw error;
+                else if (atributoNuevo.DataType != tablas[nomTabla].PrimaryKey[0].DataType)
+                    throw error;
+                else if (atributoNuevo.MaxLength != tablas[nomTabla].PrimaryKey[0].MaxLength)
+                    throw error;
+                else
+                {
+                    tablas[nomTabla].Columns[nomAtributo].ColumnName = atributoNuevo.ColumnName;
+                    GuardaArchivoDeDatos(tablas[nomTabla], NombreBaseDeDatos + "\\" + nomTabla + ".dat");
+                    GuardaArchivoIndice(GetRelation(atributoNuevo.ColumnName));
+                }
+                return;
+            }
             AgregaAtributo(nomTabla, atributoNuevo);
         }
 
@@ -219,7 +234,7 @@ namespace proyecto_BDA
         public void EliminaAtributo(string nomTabla, string nomAtributo)
         {
             var tablas = Set.Tables;
-            Constraint constraint = GetConstraint(nomTabla, nomAtributo);
+            //Constraint constraint = GetConstraint(nomTabla, nomAtributo);
 
             // Verifica que el atributo no pertenezca a la clave primaria,
             // de ser así se vacía el campo PrimaryKey. Al hacer esto, au-
@@ -227,9 +242,15 @@ namespace proyecto_BDA
             // las que pertenezca la clave primaria.
             if (tablas[nomTabla].PrimaryKey.Length == 1 && tablas[nomTabla].PrimaryKey[0].ColumnName.Equals(nomAtributo))
             {
-                //tablas[nomTabla].PrimaryKey = null;
-                tablas[nomTabla].PrimaryKey = new DataColumn[] { };
-                //tablas[nomTabla].Constraints.Remove(constraint); // El reinicializar el arreglo ya hace esto.
+                try
+                {
+                    tablas[nomTabla].PrimaryKey = null;
+                }
+                catch(ArgumentException)
+                {
+                    tablas[nomTabla].PrimaryKey = new DataColumn[] { tablas[nomTabla].Columns[nomAtributo] };
+                    throw new ArgumentException("No se puede eliminar atributo porque es parte de una relación con una llave foránea.");
+                }
             }
 
             // Si este atributo contiene alguna relación con otra tabla, 
@@ -269,42 +290,17 @@ namespace proyecto_BDA
         {
             string nomLlave = llaveForanea.ColumnName;
 
-            DataRelation relacion = new DataRelation(nomLlave, llavePrimaria, llaveForanea);
-            Set.Relations.Add(relacion);
-
-            // Crea un diccionario con la información que va a almacenarse.
-            var informacion = new Dictionary<string, string>()
+            try
             {
-                // El nombre de la relación de la clave foránea con otra
-                // tabla.
-                ["nombre relacion"] = nomLlave,
-
-                // El nombre de la tabla a la que pertenece la clave 
-                // primaria.
-                ["tabla primaria"] = llavePrimaria.Table.TableName,
-
-                // El nombre de la tabla a la que pertenece la clave 
-                // foránea.
-                ["tabla foranea"] = llaveForanea.Table.TableName,
-
-                // El nombre de la columna que representa la clave
-                // primaria.
-                ["clave primaria"] = llavePrimaria.ColumnName,
-
-                // El nombre de la columna que representa la clave
-                // foránea.
-                ["clave foranea"] = llaveForanea.ColumnName
-            };
-
-            // Guarda los metadatos del diccionario en un archivo
-            // índice.
-            string nomArchivo = NombreBaseDeDatos + "\\" + nomLlave + ".idx";
-
-            using (var archivoIDX = new FileStream(nomArchivo, FileMode.OpenOrCreate))
-            {
-                var serializador = new BinaryFormatter();
-                serializador.Serialize(archivoIDX, informacion);
+                DataRelation relacion = new DataRelation(nomLlave, llavePrimaria, llaveForanea);
+                Set.Relations.Add(relacion);
+                GuardaArchivoIndice(relacion);
             }
+            catch (Exception error)
+            {
+                throw new Exception("No se pudo crear relación entre tablas.");
+            }
+            
         }
 
         /**
@@ -356,6 +352,48 @@ namespace proyecto_BDA
             {
                 var serializador = new BinaryFormatter();
                 serializador.Serialize(archivoDAT, tabla);
+            }
+        }
+
+        /**
+         * 
+         * 
+         * */
+         private void GuardaArchivoIndice(DataRelation relation)
+        {
+
+            // Crea un diccionario con la información que va a almacenarse.
+            var informacion = new Dictionary<string, string>()
+            {
+                // El nombre de la relación de la clave foránea con otra
+                // tabla.
+                ["nombre relacion"] = relation.RelationName,
+
+                // El nombre de la tabla a la que pertenece la clave 
+                // primaria.
+                ["tabla primaria"] = relation.ParentTable.TableName,
+
+                // El nombre de la tabla a la que pertenece la clave 
+                // foránea.
+                ["tabla foranea"] = relation.ChildTable.TableName,
+
+                // El nombre de la columna que representa la clave
+                // primaria.
+                ["clave primaria"] = relation.ParentColumns[0].ColumnName,
+
+                // El nombre de la columna que representa la clave
+                // foránea.
+                ["clave foranea"] = relation.ChildColumns[0].ColumnName
+            };
+
+            // Guarda los metadatos del diccionario en un archivo
+            // índice.
+            string nomArchivo = NombreBaseDeDatos + "\\" + relation.RelationName + ".idx";
+
+            using (var archivoIDX = new FileStream(nomArchivo, FileMode.OpenOrCreate))
+            {
+                var serializador = new BinaryFormatter();
+                serializador.Serialize(archivoIDX, informacion);
             }
         }
 

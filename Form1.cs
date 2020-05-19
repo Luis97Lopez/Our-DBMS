@@ -72,6 +72,9 @@ namespace proyecto_BDA
         private void cerrarToolStripMenuItem_Click(object sender, EventArgs e)
         {
             BaseDeDatos = null;
+            diccionario_atributos.Columns.Clear();
+            ResetFrontAtributos();
+            ModificaPantallas(false);
             Invalidate();
         }
 
@@ -210,10 +213,10 @@ namespace proyecto_BDA
             boton_eliminar_tabla.Enabled = valor;
             modificar_bd.Enabled = valor;
             boton_eliminar_bd.Enabled = valor;
+
             combobox_tablas_atributos.Enabled = valor;
             textbox_agregar_atributo.Enabled = valor;
             combobox_tipo_dato.Enabled = valor;
-            textbox_longitud.Enabled = valor;
             combobox_tipo_llave.Enabled = valor;
             boton_agregar_atributo.Enabled = valor;
             boton_modificar_atributo.Enabled = valor;
@@ -252,6 +255,11 @@ namespace proyecto_BDA
             {
                 MessageBox.Show("Ya existe una llave primaria.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            catch(Exception error)
+            {
+
+                MessageBox.Show(error.Message, "Error");
+            }
             finally
             {
                 diccionario_atributos.DataSource = BaseDeDatos.ObtenAtributos(combobox_tablas_atributos.SelectedItem.ToString());
@@ -273,6 +281,7 @@ namespace proyecto_BDA
                 string nomTabla = combobox_tablas_atributos.SelectedItem.ToString();
                 string nomAtributo = diccionario_atributos.Rows[numTupla].Cells["Nombre"].Value.ToString();
                 BaseDeDatos.ModificaAtributo(nomTabla, nomAtributo, atributo);
+                CreaRelacion(atributo);
             }
             catch (DuplicateNameException)
             {
@@ -281,6 +290,10 @@ namespace proyecto_BDA
             catch (DuplicatePrimaryKeyException)
             {
                 MessageBox.Show("Ya existe una llave primaria.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            catch (Exception error)
+            {
+                MessageBox.Show(error.Message, "Error");
             }
             finally
             {
@@ -302,8 +315,15 @@ namespace proyecto_BDA
 
             string nomTabla = combobox_tablas_atributos.SelectedItem.ToString();
             string nomAtributo = diccionario_atributos.Rows[numTupla].Cells["Nombre"].Value.ToString();
-            
-            BaseDeDatos.EliminaAtributo(nomTabla, nomAtributo);
+
+            try
+            {
+                BaseDeDatos.EliminaAtributo(nomTabla, nomAtributo);
+            }
+            catch (Exception error)
+            {
+                MessageBox.Show(error.Message, "Error");
+            }
             diccionario_atributos.DataSource = BaseDeDatos.ObtenAtributos(combobox_tablas_atributos.SelectedItem.ToString());
             ResetFrontAtributos();
         }
@@ -364,6 +384,12 @@ namespace proyecto_BDA
                 res = false;
             }
 
+            if(res && combobox_tipo_llave.SelectedIndex == 2 && combobox_foranea.SelectedIndex == -1)
+            {
+                MessageBox.Show("Por favor selecciona un atributo de llave foránea", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                res = false;
+            }
+
             return res;
         }
 
@@ -374,9 +400,10 @@ namespace proyecto_BDA
 
                 combobox_foranea.Enabled = true;
                 combobox_foranea.Items.Clear();
-                foreach (var item in BaseDeDatos.Set.Tables)
+                foreach (DataTable item in BaseDeDatos.Set.Tables)
                 {
-                    if (item.ToString() != combobox_tablas_atributos.SelectedItem.ToString())
+                    if (item.ToString() != combobox_tablas_atributos.SelectedItem.ToString() &&
+                        item.PrimaryKey.Length > 0) 
                         combobox_foranea.Items.Add(item.ToString());
                 }
             }
@@ -406,12 +433,20 @@ namespace proyecto_BDA
 
         private void button1_Click(object sender, EventArgs e)
         {
+            
             foreach (DataTable item in BaseDeDatos.Set.Tables)
             {
                 Console.WriteLine("Tabla: " + item.TableName);
                 foreach (Constraint c in item.Constraints)
                 {
-                    Console.WriteLine("Restriccion: " + c.ConstraintName);
+                    Console.WriteLine("\tRestriccion: " + c.ConstraintName);
+                    if(c is ForeignKeyConstraint)
+                    {
+                        ForeignKeyConstraint f = (ForeignKeyConstraint)c;
+                        Console.WriteLine("\t\tLlave primaria: " + f.Columns[0]);
+                        Console.WriteLine("\t\tLlave foránea: " + f.RelatedColumns[0]);
+                    }
+
                 }
             }
         }
