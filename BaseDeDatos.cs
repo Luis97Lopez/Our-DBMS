@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Text.RegularExpressions;
 
 namespace proyecto_BDA
 {
@@ -433,6 +434,163 @@ namespace proyecto_BDA
             }
 
             return tablaDatos;
+        }
+
+        /**
+         * Obtiene el nombre de las columnas de una tabla.
+         **/
+        private string[] NomColumnas(string nomTabla)
+        {
+            var tabla = Set.Tables[nomTabla];
+            string[] nombres = new string[tabla.Columns.Count];
+
+            for (int i = 0; i < tabla.Columns.Count; i++)
+                nombres[i] = tabla.Columns[i].ColumnName;
+
+            return nombres;
+        }
+
+        /**
+         * Obtiene una tabla nueva, en base a una sentencia SQL.
+         **/
+        private DataTable CreaTablaConsulta(string nomTabla, string[] nomColumnas, GroupCollection argumentos)
+        {
+            // Operador de selección. Ejemplo: >, <, >=, <=, =, <>
+            string operador = argumentos["operador"].Value;
+
+            // Es el nombre de la columna que va a compararse.
+            string columnaComp = argumentos["nomAtributo"].Value;
+
+            // El valor del argumento que se va a comparar con cada tupla
+            // de la columna correspondiente. En caso de que el valor a
+            // comparar sea una cadena, este campo es nulo.
+            string numero = argumentos["valor"].Value;
+
+            // La cadena que se va a comparar con cada tupla de la columna 
+            // correspondiente. En caso de que el valor a comparar sea un
+            // valor numérico, este campo es nulo.
+            string cadena = argumentos["cadena"].Value;
+
+            var tabla = Set.Tables[nomTabla];
+
+            // Se crea la nueva tabla de resultados.
+            DataTable tablaSQL = new DataTable("resultado");
+
+            // Se crean las columnas correspondientes a la nueva tabla.
+            foreach (var nomColumna in nomColumnas)
+                tablaSQL.Columns.Add(tabla.Columns[nomColumna]);
+
+            // Se realiza la búsqueda en cada una de las tablas.
+            foreach (DataRow tupla in tabla.Rows)
+            {
+                if (!string.IsNullOrEmpty(operador))
+                {
+                    if (!string.IsNullOrEmpty(numero))
+                    {
+                        int a = int.Parse(tupla[columnaComp].ToString());
+                        int b = int.Parse(numero);
+
+                        switch (operador)
+                        {
+                            case ">" when a <= b: continue;
+                            case "<" when a >= b: continue;
+                            case ">=" when a < b: continue;
+                            case "<=" when a > b: continue;
+                            case "<>" when a == b: continue;
+                            case "=" when a != b: continue;
+                        }
+                    }
+                    else if (!string.IsNullOrEmpty(cadena) && !cadena.Equals(tupla[columnaComp].ToString()))
+                        continue;
+                }
+
+                DataRow tuplaSQL = tablaSQL.NewRow();
+
+                foreach (var nomColumna in nomColumnas)
+                    tuplaSQL[nomColumna] = tupla[nomColumna];
+            }
+
+            return tablaSQL;
+        }
+
+
+
+        /**
+         * Compila una sentencia SQL y retorna la tabla de datos correspondiente. 
+         * En caso de ocurrir un error, se arroja una excepción.
+         **/
+        public void CompilaSentencia(string oracion)
+        {
+            // Conjunto de expresiones regulares para validar la sentencia SQL.
+            string ws = @"(?:[ \n\t\r]+)";
+            string wso = @"(?:" + ws + ")?";
+            string id = wso + @"(?!(WHERE|SELECT))([A-Za-z][_0-9A-Za-z]*?)" + wso;
+            string inicio = @"^SELECT" + ws;
+            string todos = @"(?<todos>[*])";
+            string nomAtributos = @"(?<atributos>" + id + "(," + id + ")*)";
+            string atributos = @"(" + todos + "|" + nomAtributos + ")";
+            string nomTab = ws + @"FROM" + ws + "(?<nomTabla>" + id + ")";
+            string comp1 = @"((?<operador>=|>|<|>=|<=|<>)" + wso + @"(?<valor>\d+))";
+            string comp2 = @"(=" + wso + @"\'(?<cadena>\w*)\')";
+            string comparacion = @"(" + comp1 + "|" + comp2 + ")";
+            string restriccion = @"(" + ws + "WHERE" + ws + "(?<nomAtributo>" + id + ")" + comparacion + ")?";
+
+            // Junta las expresiones en una sola cadena, formando un patrón.
+            string sentencia = inicio + atributos + nomTab + restriccion + "$";
+            Regex expresionRegular = new Regex(sentencia, RegexOptions.IgnoreCase);
+
+            // Compila la expresión regular y evalúa la sintaxis de la sentencia SQL.
+            var match = expresionRegular.Match(oracion);
+
+            // Verifica que la sintaxis de la oración sea correcta.
+            if (!match.Success)
+                throw new Exception("Tu sentencia SQL contiene un error de sintaxis.");
+
+            // Verifica que la tabla especificada en la sentencia exista.
+            if (!Set.Tables.Contains(match.Groups["nomTabla"].Value))
+                throw new Exception("La tabla especificada no existe.");
+
+            string nomTabla = match.Groups["nomTabla"].Value;
+            string atributoComp = match.Groups["nomAtributo"].Value;
+            string cad = match.Groups["cadena"].Value;
+            string numero = match.Groups["valor"].Value;
+            var tabla = Set.Tables[nomTabla];
+            string[] nombres;
+
+            // Checa si van a proyectarse todos los atributos o solo algunos.
+            if (!string.IsNullOrEmpty(match.Groups["todos"].Value))
+                nombres = NomColumnas(nomTabla);
+            else
+            {
+                string valAtributos = Regex.Replace(match.Groups["atributos"].Value, "[ \n\t\r]+", "");
+                nombres = valAtributos.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
+
+                foreach (var atributo in nombres)
+                    if (!tabla.Columns.Contains(atributo))
+                        throw new Exception("\"" + atributo + "\" no existe en la tabla \"" + nomTabla + "\"");
+            }
+
+            // Verifica si se va a comparar una tabla con un valor. De ser así también
+            // se verifica que dicha columna exista y que los tipos de datos que se 
+            // quieran comparar sean consistentes.
+            if (!string.IsNullOrEmpty(atributoComp))
+            {
+                if (!tabla.Columns.Contains(atributoComp))
+                    throw new Exception("\"" + atributoComp + "\" no existe en la tabla \"" + nomTabla + "\"");
+                else if (tabla.Columns[atributoComp].Equals("String") && !string.IsNullOrEmpty(numero))
+                    throw new Exception("La columna \"" + atributoComp + "\" es de tipo cadena. No puedes comparar un valor" +
+                        "numérico con una cadena.");
+                else if (tabla.Columns[atributoComp].Equals("Int32") && !string.IsNullOrEmpty(cad))
+                    throw new Exception("La columna \"" + atributoComp + "\" es de tipo entero. No puedes comparar una cadena" +
+                        "con un valor entero.");
+                else if (tabla.Columns[atributoComp].Equals("Single") && !string.IsNullOrEmpty(cad))
+                    throw new Exception("La columna \"" + atributoComp + "\" es de tipo flotante. No puedes comparar una cadena" +
+                        "con un valor flotante.");
+
+            }
+
+            DataTable tablaSQL = CreaTablaConsulta(nomTabla, nombres, match.Groups);
+
         }
     }
 }
