@@ -48,7 +48,7 @@
             this.boton_modificar_registro = new System.Windows.Forms.Button();
             this.boton_eliminar_registro = new System.Windows.Forms.Button();
             this.boton_agregar_registro = new System.Windows.Forms.Button();
-            this.combobox_datos = new System.Windows.Forms.ComboBox();
+            this.combobox_tablas_datos = new System.Windows.Forms.ComboBox();
             this.label16 = new System.Windows.Forms.Label();
             this.grid_insertar_datos = new System.Windows.Forms.DataGridView();
             this.vista_dd = new System.Windows.Forms.TabPage();
@@ -69,6 +69,7 @@
             this.label6 = new System.Windows.Forms.Label();
             this.boton_agregar_tabla = new System.Windows.Forms.Button();
             this.tab_atributos = new System.Windows.Forms.TabPage();
+            this.button1 = new System.Windows.Forms.Button();
             this.combobox_foranea = new System.Windows.Forms.ComboBox();
             this.boton_modificar_atributo = new System.Windows.Forms.Button();
             this.label_atributo_actual = new System.Windows.Forms.Label();
@@ -92,7 +93,6 @@
             this.TipoInd = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.label1 = new System.Windows.Forms.Label();
             this.vistas = new System.Windows.Forms.TabControl();
-            this.button1 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher1)).BeginInit();
             this.menu.SuspendLayout();
             this.vista_datos.SuspendLayout();
@@ -143,7 +143,7 @@
             this.nuevoToolStripMenuItem1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.nuevoToolStripMenuItem1.Name = "nuevoToolStripMenuItem1";
             this.nuevoToolStripMenuItem1.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
-            this.nuevoToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.nuevoToolStripMenuItem1.Size = new System.Drawing.Size(156, 22);
             this.nuevoToolStripMenuItem1.Text = "&Nuevo";
             this.nuevoToolStripMenuItem1.Click += new System.EventHandler(this.nuevoToolStripMenuItem1_Click);
             // 
@@ -153,14 +153,14 @@
             this.abrirToolStripMenuItem1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.abrirToolStripMenuItem1.Name = "abrirToolStripMenuItem1";
             this.abrirToolStripMenuItem1.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.abrirToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.abrirToolStripMenuItem1.Size = new System.Drawing.Size(156, 22);
             this.abrirToolStripMenuItem1.Text = "&Abrir";
             this.abrirToolStripMenuItem1.Click += new System.EventHandler(this.abrirToolStripMenuItem1_Click);
             // 
             // toolStripSeparator
             // 
             this.toolStripSeparator.Name = "toolStripSeparator";
-            this.toolStripSeparator.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator.Size = new System.Drawing.Size(153, 6);
             // 
             // guardarToolStripMenuItem
             // 
@@ -168,36 +168,36 @@
             this.guardarToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.guardarToolStripMenuItem.Name = "guardarToolStripMenuItem";
             this.guardarToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-            this.guardarToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.guardarToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
             this.guardarToolStripMenuItem.Text = "&Guardar";
             // 
             // guardarcomoToolStripMenuItem
             // 
             this.guardarcomoToolStripMenuItem.Name = "guardarcomoToolStripMenuItem";
-            this.guardarcomoToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.guardarcomoToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
             this.guardarcomoToolStripMenuItem.Text = "G&uardar como";
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(153, 6);
             // 
             // cerrarToolStripMenuItem
             // 
             this.cerrarToolStripMenuItem.Name = "cerrarToolStripMenuItem";
-            this.cerrarToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.cerrarToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
             this.cerrarToolStripMenuItem.Text = "Cerrar";
             this.cerrarToolStripMenuItem.Click += new System.EventHandler(this.cerrarToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(153, 6);
             // 
             // salirToolStripMenuItem
             // 
             this.salirToolStripMenuItem.Name = "salirToolStripMenuItem";
-            this.salirToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.salirToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
             this.salirToolStripMenuItem.Text = "&Salir";
             this.salirToolStripMenuItem.Click += new System.EventHandler(this.SalirToolStripMenuItem_Click);
             // 
@@ -209,7 +209,7 @@
             this.vista_datos.Controls.Add(this.boton_modificar_registro);
             this.vista_datos.Controls.Add(this.boton_eliminar_registro);
             this.vista_datos.Controls.Add(this.boton_agregar_registro);
-            this.vista_datos.Controls.Add(this.combobox_datos);
+            this.vista_datos.Controls.Add(this.combobox_tablas_datos);
             this.vista_datos.Controls.Add(this.label16);
             this.vista_datos.Controls.Add(this.grid_insertar_datos);
             this.vista_datos.Location = new System.Drawing.Point(4, 22);
@@ -253,6 +253,7 @@
             this.boton_modificar_registro.TabIndex = 31;
             this.boton_modificar_registro.Text = "Modificar Registro";
             this.boton_modificar_registro.UseVisualStyleBackColor = true;
+            this.boton_modificar_registro.Click += new System.EventHandler(this.boton_modificar_registro_Click);
             // 
             // boton_eliminar_registro
             // 
@@ -262,6 +263,7 @@
             this.boton_eliminar_registro.TabIndex = 30;
             this.boton_eliminar_registro.Text = "Eliminar Registro";
             this.boton_eliminar_registro.UseVisualStyleBackColor = true;
+            this.boton_eliminar_registro.Click += new System.EventHandler(this.boton_eliminar_registro_Click);
             // 
             // boton_agregar_registro
             // 
@@ -271,15 +273,17 @@
             this.boton_agregar_registro.TabIndex = 29;
             this.boton_agregar_registro.Text = "Agregar Registro";
             this.boton_agregar_registro.UseVisualStyleBackColor = true;
+            this.boton_agregar_registro.Click += new System.EventHandler(this.boton_agregar_registro_Click);
             // 
-            // combobox_datos
+            // combobox_tablas_datos
             // 
-            this.combobox_datos.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.combobox_datos.FormattingEnabled = true;
-            this.combobox_datos.Location = new System.Drawing.Point(25, 32);
-            this.combobox_datos.Name = "combobox_datos";
-            this.combobox_datos.Size = new System.Drawing.Size(121, 21);
-            this.combobox_datos.TabIndex = 20;
+            this.combobox_tablas_datos.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.combobox_tablas_datos.FormattingEnabled = true;
+            this.combobox_tablas_datos.Location = new System.Drawing.Point(25, 32);
+            this.combobox_tablas_datos.Name = "combobox_tablas_datos";
+            this.combobox_tablas_datos.Size = new System.Drawing.Size(121, 21);
+            this.combobox_tablas_datos.TabIndex = 20;
+            this.combobox_tablas_datos.SelectedIndexChanged += new System.EventHandler(this.combobox_tablas_datos_SelectedIndexChanged);
             // 
             // label16
             // 
@@ -503,6 +507,17 @@
             this.tab_atributos.TabIndex = 1;
             this.tab_atributos.Text = "Atributos";
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(388, 74);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(72, 23);
+            this.button1.TabIndex = 30;
+            this.button1.Text = "prueba";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Visible = false;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // combobox_foranea
             // 
             this.combobox_foranea.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -723,17 +738,7 @@
             this.vistas.SelectedIndex = 0;
             this.vistas.Size = new System.Drawing.Size(794, 469);
             this.vistas.TabIndex = 13;
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(388, 74);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(72, 23);
-            this.button1.TabIndex = 30;
-            this.button1.Text = "prueba";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Visible = false;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.vistas.SelectedIndexChanged += new System.EventHandler(this.vistas_SelectedIndexChanged);
             // 
             // Form1
             // 
@@ -819,7 +824,7 @@
         private System.Windows.Forms.Button boton_modificar_registro;
         private System.Windows.Forms.Button boton_eliminar_registro;
         private System.Windows.Forms.Button boton_agregar_registro;
-        private System.Windows.Forms.ComboBox combobox_datos;
+        private System.Windows.Forms.ComboBox combobox_tablas_datos;
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.DataGridView grid_insertar_datos;
         private System.Windows.Forms.Label label_bd;

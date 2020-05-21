@@ -46,7 +46,6 @@ namespace proyecto_BDA
                     string[] subitems = new string[] { item.ToString(), ruta };
                     ListViewItem list = new ListViewItem(subitems);
                     list_tablas.Items.Add(list);
-
                 }
             }
             else
@@ -73,6 +72,8 @@ namespace proyecto_BDA
         {
             BaseDeDatos = null;
             diccionario_atributos.Columns.Clear();
+            grid_insertar_datos.Columns.Clear();
+            registros_datos.Columns.Clear();
             ResetFrontAtributos();
             ModificaPantallas(false);
             Invalidate();
@@ -222,6 +223,13 @@ namespace proyecto_BDA
             boton_modificar_atributo.Enabled = valor;
             boton_eliminar_atributo.Enabled = valor;
             diccionario_atributos.ReadOnly = true;
+
+            combobox_tablas_datos.Enabled = valor;
+            grid_insertar_datos.Enabled = valor;
+            registros_datos.Enabled = valor;
+            boton_agregar_registro.Enabled = valor;
+            boton_modificar_registro.Enabled = valor;
+            boton_eliminar_registro.Enabled = valor;
         }
 
         private void ResetFrontAtributos()
@@ -449,6 +457,67 @@ namespace proyecto_BDA
 
                 }
             }
+        }
+
+        private void vistas_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (BaseDeDatos == null)
+                return;
+            if (vistas.SelectedIndex == 1)
+            {
+                combobox_tablas_datos.Items.Clear();
+                foreach (DataTable item in BaseDeDatos.Set.Tables)
+                {
+                    combobox_tablas_datos.Items.Add(item.TableName);
+                }
+            }
+        }
+
+        private void combobox_tablas_datos_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if(combobox_tablas_datos.SelectedIndex != -1)
+            {
+                string table_name = combobox_tablas_datos.SelectedItem.ToString();
+                DataTable table = BaseDeDatos.Set.Tables[table_name];
+
+                grid_insertar_datos.Columns.Clear();
+
+                foreach (DataColumn item in table.Columns)
+                {
+                    grid_insertar_datos.Columns.Add(item.ColumnName, item.ColumnName);
+                }
+            }
+        }
+
+        private List<string> GetDataOfDGV()
+        {
+            List<string> res = new List<string>();
+
+            foreach (DataGridViewCell item in grid_insertar_datos.Rows[0].Cells)
+            {
+                if (item.Value != null)
+                {
+                    res.Add(item.Value.ToString());
+                    Console.WriteLine(item.Value);
+                }
+            }
+
+            return res;
+        }
+
+        private void boton_agregar_registro_Click(object sender, EventArgs e)
+        {
+            List<string> data = GetDataOfDGV();
+        }
+
+        private void boton_modificar_registro_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void boton_eliminar_registro_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
