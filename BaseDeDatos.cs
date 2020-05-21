@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text.RegularExpressions;
+using System.Windows.Forms;
 
 namespace proyecto_BDA
 {
@@ -340,6 +341,36 @@ namespace proyecto_BDA
         {
             var tablas = Set.Tables;
             tablas[nomTabla].Rows.Add(registro);
+            GuardaArchivoDeDatos(tablas[nomTabla], NombreBaseDeDatos + "\\" + nomTabla + ".dat");
+        }
+
+        /**
+         * Agrega un registro a una tabla.
+         **/
+        public void ModificaRegistro(string nomTabla, object[] registro, int idx)
+        {
+            var tablas = Set.Tables;
+            object[] temp = tablas[nomTabla].Rows[idx].ItemArray;
+            tablas[nomTabla].Rows.RemoveAt(idx);
+            try
+            {
+                tablas[nomTabla].Rows.Add(registro);
+            }
+            catch(Exception exception)
+            {
+                tablas[nomTabla].Rows.Add(temp);
+                throw exception;
+            }
+            GuardaArchivoDeDatos(tablas[nomTabla], NombreBaseDeDatos + "\\" + nomTabla + ".dat");
+        }
+
+        /**
+         * Elimina un registro a una tabla.
+         **/
+        public void EliminaRegistro(string nomTabla, int idx)
+        {
+            var tablas = Set.Tables;
+            tablas[nomTabla].Rows.RemoveAt(idx);
             GuardaArchivoDeDatos(tablas[nomTabla], NombreBaseDeDatos + "\\" + nomTabla + ".dat");
         }
 

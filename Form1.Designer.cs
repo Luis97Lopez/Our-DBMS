@@ -143,7 +143,7 @@
             this.nuevoToolStripMenuItem1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.nuevoToolStripMenuItem1.Name = "nuevoToolStripMenuItem1";
             this.nuevoToolStripMenuItem1.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
-            this.nuevoToolStripMenuItem1.Size = new System.Drawing.Size(156, 22);
+            this.nuevoToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
             this.nuevoToolStripMenuItem1.Text = "&Nuevo";
             this.nuevoToolStripMenuItem1.Click += new System.EventHandler(this.nuevoToolStripMenuItem1_Click);
             // 
@@ -244,6 +244,7 @@
             this.registros_datos.ReadOnly = true;
             this.registros_datos.Size = new System.Drawing.Size(739, 266);
             this.registros_datos.TabIndex = 32;
+            this.registros_datos.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.registros_datos_CellContentClick);
             // 
             // boton_modificar_registro
             // 

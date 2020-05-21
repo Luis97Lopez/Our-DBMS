@@ -470,6 +470,9 @@ namespace proyecto_BDA
                 {
                     combobox_tablas_datos.Items.Add(item.TableName);
                 }
+
+                grid_insertar_datos.Columns.Clear();
+                registros_datos.Columns.Clear();
             }
         }
 
@@ -481,43 +484,125 @@ namespace proyecto_BDA
                 DataTable table = BaseDeDatos.Set.Tables[table_name];
 
                 grid_insertar_datos.Columns.Clear();
+                registros_datos.Columns.Clear();
 
                 foreach (DataColumn item in table.Columns)
                 {
                     grid_insertar_datos.Columns.Add(item.ColumnName, item.ColumnName);
+                    registros_datos.Columns.Add(item.ColumnName, item.ColumnName);
                 }
+
+                ImprimeRegistrosDeDatos();
             }
         }
 
-        private List<string> GetDataOfDGV()
+        private string[] GetDataOfDGV()
         {
-            List<string> res = new List<string>();
+            List<string> temp = new List<string>();
 
             foreach (DataGridViewCell item in grid_insertar_datos.Rows[0].Cells)
             {
                 if (item.Value != null)
+                    temp.Add(item.Value.ToString());
+            }
+            return temp.ToArray();
+        }
+
+        private void ImprimeRegistrosDeDatos()
+        {
+            string table_name = combobox_tablas_datos.Text;
+            DataTable table = BaseDeDatos.Set.Tables[table_name];
+
+            if (table.Columns.Count > 0)
+            {
+                registros_datos.Rows.Clear();
+                foreach (DataRow item in table.Rows)
                 {
-                    res.Add(item.Value.ToString());
-                    Console.WriteLine(item.Value);
+                    registros_datos.Rows.Add(item.ItemArray);
                 }
             }
-
-            return res;
         }
 
         private void boton_agregar_registro_Click(object sender, EventArgs e)
         {
-            List<string> data = GetDataOfDGV();
+            string [] data = GetDataOfDGV();
+            string table_name = combobox_tablas_datos.Text;
+            DataTable table = BaseDeDatos.Set.Tables[table_name];
+
+            if(table.Columns.Count == data.Length)
+            {
+                try
+                {
+                    BaseDeDatos.AgregaRegistro(table.TableName, data);
+                }
+                catch(Exception error)
+                {
+                    MessageBox.Show(error.Message, "Error");
+                }
+            }
+
+            grid_insertar_datos.Rows.Clear();
+            ImprimeRegistrosDeDatos();
         }
 
         private void boton_modificar_registro_Click(object sender, EventArgs e)
         {
+            if (registros_datos.SelectedCells.Count == 0)
+                return;
 
+            int index = registros_datos.SelectedCells[0].RowIndex;
+            string[] data = GetDataOfDGV();
+            string table_name = combobox_tablas_datos.Text;
+
+            try
+            {
+                BaseDeDatos.ModificaRegistro(table_name, data, index);
+            }
+            catch (Exception error)
+            {
+                MessageBox.Show(error.Message, "Error");
+            }
+
+            grid_insertar_datos.Rows.Clear();
+            ImprimeRegistrosDeDatos();
         }
 
         private void boton_eliminar_registro_Click(object sender, EventArgs e)
         {
+            if (registros_datos.SelectedCells.Count == 0)
+                return;
 
+            int index = registros_datos.SelectedCells[0].RowIndex;
+            string table_name = combobox_tablas_datos.Text;
+
+            try
+            {
+                BaseDeDatos.EliminaRegistro(table_name, index);
+            }
+            catch (Exception error)
+            {
+                MessageBox.Show(error.Message, "Error");
+            }
+
+            grid_insertar_datos.Rows.Clear();
+            ImprimeRegistrosDeDatos();
+        }
+
+        private void registros_datos_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            grid_insertar_datos.Rows.Clear();
+            if (registros_datos.SelectedCells.Count == 0)
+                return;
+            
+            var row = grid_insertar_datos.Rows[0];
+
+            int idx = registros_datos.SelectedCells[0].RowIndex;
+            DataGridViewRow newRow = registros_datos.Rows[idx];
+
+            for (Int32 index = 0; index < row.Cells.Count; index++)
+            {
+                row.Cells[index].Value = newRow.Cells[index].Value;
+            }
         }
     }
 }
