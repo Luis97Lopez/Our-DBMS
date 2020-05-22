@@ -535,9 +535,9 @@ namespace proyecto_BDA
                 {
                     BaseDeDatos.AgregaRegistro(table.TableName, data);
                 }
-                catch(Exception error)
+                catch (Exception error)
                 {
-                    MessageBox.Show(error.Message, "Error");
+                    MessageBox.Show(error.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
 

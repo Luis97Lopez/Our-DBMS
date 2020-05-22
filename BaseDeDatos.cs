@@ -213,12 +213,13 @@ namespace proyecto_BDA
             }
             catch (ArgumentException error)
             {
+                var excepcion = new ArgumentException("No se puede modificar el atributo porque es parte de una relación con una llave foránea.");
                 if (!atributoNuevo.Unique)
-                    throw error;
+                    throw excepcion;
                 else if (atributoNuevo.DataType != tablas[nomTabla].PrimaryKey[0].DataType)
-                    throw error;
+                    throw excepcion;
                 else if (atributoNuevo.MaxLength != tablas[nomTabla].PrimaryKey[0].MaxLength)
-                    throw error;
+                    throw excepcion;
                 else
                 {
                     tablas[nomTabla].Columns[nomAtributo].ColumnName = atributoNuevo.ColumnName;
