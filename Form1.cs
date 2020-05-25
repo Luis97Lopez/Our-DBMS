@@ -604,5 +604,33 @@ namespace proyecto_BDA
                 row.Cells[index].Value = newRow.Cells[index].Value;
             }
         }
+
+        private void boton_consulta_Click(object sender, EventArgs e)
+        {
+            if (textbox_consultas.Text == "")
+                return;
+
+            string consulta = textbox_consultas.Text;
+
+            try
+            {
+                DataTable tabla = BaseDeDatos.CompilaSentencia(consulta);
+
+                Console.WriteLine(tabla.Rows.Count);
+
+                grid_consultas.Columns.Clear();
+
+                foreach (DataColumn item in tabla.Columns)
+                    grid_consultas.Columns.Add(item.ColumnName, item.ColumnName);
+
+                foreach (DataRow item in tabla.Rows)
+                    grid_consultas.Rows.Add(item.ItemArray);
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show(exception.Message, "Error");
+                return;
+            }
+        }
     }
 }

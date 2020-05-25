@@ -491,7 +491,7 @@ namespace proyecto_BDA
             string operador = argumentos["operador"].Value;
 
             // Es el nombre de la columna que va a compararse.
-            string columnaComp = argumentos["nomAtributo"].Value;
+            string columnaComp = argumentos["nomAtributo"].Value.Trim();
 
             // El valor del argumento que se va a comparar con cada tupla
             // de la columna correspondiente. En caso de que el valor a
@@ -510,7 +510,7 @@ namespace proyecto_BDA
 
             // Se crean las columnas correspondientes a la nueva tabla.
             foreach (var nomColumna in nomColumnas)
-                tablaSQL.Columns.Add(tabla.Columns[nomColumna]);
+                tablaSQL.Columns.Add(tabla.Columns[nomColumna].ColumnName);
 
             // Se realiza la búsqueda en cada una de las tablas.
             foreach (DataRow tupla in tabla.Rows)
@@ -539,7 +539,12 @@ namespace proyecto_BDA
                 DataRow tuplaSQL = tablaSQL.NewRow();
 
                 foreach (var nomColumna in nomColumnas)
+                {
                     tuplaSQL[nomColumna] = tupla[nomColumna];
+                }
+
+                tablaSQL.Rows.Add(tuplaSQL);
+
             }
 
             return tablaSQL;
@@ -551,7 +556,7 @@ namespace proyecto_BDA
          * Compila una sentencia SQL y retorna la tabla de datos correspondiente. 
          * En caso de ocurrir un error, se arroja una excepción.
          **/
-        public void CompilaSentencia(string oracion)
+        public DataTable CompilaSentencia(string oracion)
         {
             // Conjunto de expresiones regulares para validar la sentencia SQL.
             string ws = @"(?:[ \n\t\r]+)";
@@ -583,7 +588,7 @@ namespace proyecto_BDA
                 throw new Exception("La tabla especificada no existe.");
 
             string nomTabla = match.Groups["nomTabla"].Value;
-            string atributoComp = match.Groups["nomAtributo"].Value;
+            string atributoComp = match.Groups["nomAtributo"].Value.Trim();
             string cad = match.Groups["cadena"].Value;
             string numero = match.Groups["valor"].Value;
             var tabla = Set.Tables[nomTabla];
@@ -607,6 +612,7 @@ namespace proyecto_BDA
             // quieran comparar sean consistentes.
             if (!string.IsNullOrEmpty(atributoComp))
             {
+                Console.WriteLine(atributoComp);
                 if (!tabla.Columns.Contains(atributoComp))
                     throw new Exception("\"" + atributoComp + "\" no existe en la tabla \"" + nomTabla + "\"");
                 else if (tabla.Columns[atributoComp].Equals("String") && !string.IsNullOrEmpty(numero))
@@ -622,7 +628,7 @@ namespace proyecto_BDA
             }
 
             DataTable tablaSQL = CreaTablaConsulta(nomTabla, nombres, match.Groups);
-
+            return tablaSQL;
         }
     }
 }
