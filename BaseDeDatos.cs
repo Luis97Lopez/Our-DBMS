@@ -136,10 +136,13 @@ namespace proyecto_BDA
         {
             var tablas = Set.Tables;
 
+            // Realiza el proceso de modificación de la tabla 
+            // a la base de datos.
             tablas.Add(nomTablaNueva);
             tablas[nomTablaNueva].Merge(tablas[nomTablaAnterior]);
-
             EliminaTabla(nomTablaAnterior);
+
+            // Actualiza los cambios.
             GuardaArchivoDeDatos(tablas[nomTablaNueva], NombreBaseDeDatos + "\\" + nomTablaNueva + ".dat");
         }
 
@@ -175,6 +178,8 @@ namespace proyecto_BDA
             var tablas = Set.Tables;
             bool pk = false;
 
+            // Se verifica que la tabla no contenga clave primaria.
+            // De ser así se arroja una excepción.
             if (columna.Unique)
                 if (tablas[nomTabla].PrimaryKey.Length == 0)
                 {
@@ -187,9 +192,12 @@ namespace proyecto_BDA
 
             tablas[nomTabla].Columns.Add(columna);
 
+            // Agrega la llave primaria a la tabla.
             if(pk)
                 AgregaLlavePrimaria(nomTabla, columna);
 
+            // Actualiza el contenido de la tabla en el archivo
+            // de datos.
             GuardaArchivoDeDatos(tablas[nomTabla], NombreBaseDeDatos + "\\" + nomTabla + ".dat");
             return true;
         }
@@ -203,16 +211,22 @@ namespace proyecto_BDA
         {
             var tablas = Set.Tables;
 
+            // Verifica que el nombre del atributo nuevo no esté presente
+            // en la tabla. De ser así se arroja una excepción.
             if (atributoNuevo.Unique && tablas[nomTabla].PrimaryKey.Length > 0 &&
                 tablas[nomTabla].PrimaryKey[0].ColumnName != nomAtributo)
                 throw new DuplicatePrimaryKeyException();
 
+            // Se realiza el proceso de modificación. Siempre y cuando se
+            // respete la integridad referencial, de no ser así, se arroja
+            // una excepción.
             try
             {
                 EliminaAtributo(nomTabla, nomAtributo);
             }
             catch (ArgumentException error)
             {
+                // Maneja el error y determina de qué tipo es.
                 var excepcion = new ArgumentException("No se puede modificar el atributo porque es parte de una relación con una llave foránea.");
                 if (!atributoNuevo.Unique)
                     throw excepcion;
@@ -295,12 +309,14 @@ namespace proyecto_BDA
 
             try
             {
+                // Crea la relación y la guarda en un archivo. idx.
                 DataRelation relacion = new DataRelation(nomLlave, llavePrimaria, llaveForanea);
                 Set.Relations.Add(relacion);
                 GuardaArchivoIndice(relacion);
             }
             catch (Exception error)
             {
+                // Se notifica al usuario que ocurrió un error.
                 throw new Exception("No se pudo crear relación entre tablas.");
             }
             
@@ -381,6 +397,8 @@ namespace proyecto_BDA
          **/
         private void GuardaArchivoDeDatos(DataTable tabla, string nombreTabla)
         {
+            // Crea un nuevo archivo de datos o; en caso de que ya exista, lee
+            // el archivo de datos correspondiente.
             using (var archivoDAT = new FileStream(nombreTabla, FileMode.OpenOrCreate))
             {
                 var serializador = new BinaryFormatter();
@@ -389,10 +407,10 @@ namespace proyecto_BDA
         }
 
         /**
-         * 
-         * 
+         * Guarda una relación entre dos tablas en un
+         * archivo índice.
          * */
-         private void GuardaArchivoIndice(DataRelation relation)
+        private void GuardaArchivoIndice(DataRelation relation)
         {
 
             // Crea un diccionario con la información que va a almacenarse.
@@ -438,12 +456,19 @@ namespace proyecto_BDA
         {
             var tabla = Set.Tables[nomTabla];
 
+            // Crea el modelo de la tabla, para visualizar la
+            // información de los atributos.
             DataTable tablaDatos = new DataTable();
+
+            // Establece los nombres de las columnas.
             string[] nomColumnas = { "Nombre", "Tipo de Dato", "Longitud", "Tipo de Llave" };
+
 
             foreach (var nomColumna in nomColumnas)
                 tablaDatos.Columns.Add(nomColumna);
 
+            // Asigna los valores a cada renglón y columna, de modo que 
+            // sean fácilmente interpretables en un Data Grid View.
             foreach (DataColumn atributo in tabla.Columns)
             {
                 DataRow dataRow = tablaDatos.NewRow();
@@ -522,6 +547,9 @@ namespace proyecto_BDA
                         int a = int.Parse(tupla[columnaComp].ToString());
                         int b = int.Parse(numero);
 
+                        // Realiza el filtrado de las condiciones por
+                        // cada tupla. Aquellas que no cumplan, no se
+                        // agregan a la tabla que va a regresarse.
                         switch (operador)
                         {
                             case ">" when a <= b: continue;
@@ -532,16 +560,18 @@ namespace proyecto_BDA
                             case "=" when a != b: continue;
                         }
                     }
+
+                    // Si es una cadena y la cadena NO ES 
+                    // estrictamente igual, no se agrega.
                     else if (!string.IsNullOrEmpty(cadena) && !cadena.Equals(tupla[columnaComp].ToString()))
                         continue;
                 }
 
                 DataRow tuplaSQL = tablaSQL.NewRow();
 
+                // 
                 foreach (var nomColumna in nomColumnas)
-                {
                     tuplaSQL[nomColumna] = tupla[nomColumna];
-                }
 
                 tablaSQL.Rows.Add(tuplaSQL);
 
@@ -573,7 +603,7 @@ namespace proyecto_BDA
             string restriccion = @"(" + ws + "WHERE" + ws + "(?<nomAtributo>" + id + ")" + comparacion + ")?";
 
             // Junta las expresiones en una sola cadena, formando un patrón.
-            string sentencia = inicio + atributos + nomTab + restriccion + "$";
+            string sentencia = inicio + atributos + nomTab + restriccion + wso + "$";
             Regex expresionRegular = new Regex(sentencia, RegexOptions.IgnoreCase);
 
             // Compila la expresión regular y evalúa la sintaxis de la sentencia SQL.

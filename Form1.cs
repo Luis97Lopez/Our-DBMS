@@ -626,9 +626,10 @@ namespace proyecto_BDA
                 foreach (DataRow item in tabla.Rows)
                     grid_consultas.Rows.Add(item.ItemArray);
             }
-            catch (Exception exception)
+            catch (Exception error)
             {
-                MessageBox.Show(exception.Message, "Error");
+                grid_consultas.Columns.Clear();
+                MessageBox.Show(error.Message, "Error al ejecutar consulta", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
         }
